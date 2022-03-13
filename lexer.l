@@ -1,4 +1,4 @@
-%{}
+%%{}
 
 %%
 /* Regles lexicales */
@@ -6,14 +6,19 @@
 "printf"{return tPRINTF;}
 "return"{return tRETURN;}
 
+"const" {return tCONST;}
+"int" {return tINT;}
+
+"if" {return tIF;}
+"else"{return tELSE;}
+"while"{return tWHILE;}
+
 "(" {return tOP;}
 ")" {return tCP;}
 "{" {return tOB;}
 "}" {return tCB;}
-
-"const" {return tCONST;}
-"int" {return tINT;}
-[a-z][a-zA-Z0-9_]* {return tID;}
+"," {return tCOM;}
+";" {return tSC;}
 
 "+" {return tADD;}
 "-" {return tSUB;}
@@ -21,20 +26,12 @@
 "/" {return tDIV;}
 "=" {return tEQ;}
 
-" " {return tSPACE;}
-[ \t] {return tTAB;}
-[ \n] {return tNL;}
-"," {return tCOM;}
-";" {return tSC;}
-
-(|+|-)([1-9][0-9]*)(e[0-9]+)? {return tNB;}
-
-"if" {return tIF;}
-"else"{return tELSE;}
-"while"{return tWHILE;}
-
-
-
+[a-z][a-zA-Z0-9_]* {
+    strcpy(yyval.str , yytext);
+    return tID;}
+(|+|-)([1-9][0-9]*)(e[0-9]+)? {
+    yylval.nb = (int) strtold(yytext, NULL);
+    return tNB;}
 
 
 
