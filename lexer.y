@@ -22,9 +22,9 @@ Funs : | Fun Funs ;
 Fun : tINT tID tOP Params tCP tOB Body tCB ;
 
 Params : | tINT tID ParamsNext ;
-ParamsNext : tCOM tINT tID ParamsNext ;
+ParamsNext : | tCOM tINT tID ParamsNext ;
 
-Body : Affectations | ;
+Body : Declarations Content | Content ;
 Declarations : tINT DecNext tSC ; 
 DecNext : tID tCOM DecNext
         | tID 
@@ -37,15 +37,18 @@ Valeur : Valeur tADD Valeur
     | tID 
     | tOP Valeur tCP;
     
-Boucleif : tIF tOP Condition tCP tOB Content tCB Suiteif ;
-Suiteif : | Content 
-          | tELSE tOB Content tCB
-          | tELSE tIF tOP Condition tCP tOB Content tCB ;
+BoucleIf : tIF tOP Condition tCP tOB Content tCB SuiteIf ;
+SuiteIf : | tELSE tOB Content tCB
+          | tELSE tIF tOP Condition tCP tOB Content tCB SuiteIf;
 
-Bouclewhile : tWHILE tOP Condition tCP tOB Content tCB Content ;
+BoucleWhile : tWHILE tOP Condition tCP tOB Content tCB Content ;
 
-Content : TOUT ;
-Condition : ;
+Condition : tTRUE
+           | tFALSE;
+           /* A COMPLETER */
+
+Content : | Declarations Content | Affectations Content | BoucleIf Content | BoucleWhile Content ;
+
 
 Printf : tPRINTF tOP C tCP
 

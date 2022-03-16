@@ -12,6 +12,8 @@
 "if" {return tIF;}
 "else"{return tELSE;}
 "while"{return tWHILE;}
+"true" {return tTRUE;}
+"false" {return tFALSE;}
 
 "(" {return tOP;}
 ")" {return tCP;}
@@ -25,11 +27,15 @@
 "*" {return tMUL;}
 "/" {return tDIV;}
 "=" {return tEQ;}
+"<" {return tINF;}
+">" {return tSUP;}
+"==" {return tEQUAL;}
 "!=" {return tDIF;}
 
 [a-z][a-zA-Z0-9_]* {
     strcpy(yyval.str , yytext);
     return tID;}
+    
 (|+|-)([1-9][0-9]*)(e[0-9]+)? {
     yylval.nb = (int) strtold(yytext, NULL);
     return tNB;}
