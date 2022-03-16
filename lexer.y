@@ -1,7 +1,7 @@
 %{
 #include <stdlib.h>
 #include <stdio.h>
-int var[26];
+int var[24];
 void yyerror(char *s);
 %}
 
