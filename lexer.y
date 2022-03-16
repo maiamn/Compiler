@@ -62,4 +62,3 @@ void yyerror(char *s){
     exit(1);
 }
 
-/* syntaxe correcte mais éditeur de texte reconnait pas ?*/
