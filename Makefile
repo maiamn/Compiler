@@ -1,5 +1,5 @@
-GRM=yacc.y
-LEX=lex.l
+GRM=lexer.y
+LEX=lexer.l
 BIN=comp
 
 CC=gcc

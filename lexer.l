@@ -1,17 +1,21 @@
-%%{}
+%{
+#include "y.tab.h"
+%}
+%option noyywrap
 
-%%
+
 /* Regles lexicales */
+%%
 "main" {return tMAIN;}
-"printf"{return tPRINTF;}
-"return"{return tRETURN;}
+"printf" {return tPRINTF;}
+"return" {return tRETURN;}
 
 "const" {return tCONST;}
 "int" {return tINT;}
 
 "if" {return tIF;}
-"else"{return tELSE;}
-"while"{return tWHILE;}
+"else" {return tELSE;}
+"while" {return tWHILE;}
 "true" {return tTRUE;}
 "false" {return tFALSE;}
 
@@ -33,10 +37,10 @@
 "!=" {return tDIF;}
 
 [a-z][a-zA-Z0-9_]* {
-    strcpy(yyval.str , yytext);
+    strcpy(yylval.str , yytext);
     return tID;}
     
-(|+|-)([1-9][0-9]*)(e[0-9]+)? {
+[0-9]+(e[0-9]+)? {
     yylval.nb = (int) strtold(yytext, NULL);
     return tNB;}
 

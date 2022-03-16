@@ -6,13 +6,12 @@ void yyerror(char *s);
 %}
 
 %union { int nb ; char str[16];}
-%token tMAIN tPRINTF tRETURN  tIF tELSE tWHILE
+%token tMAIN tPRINTF tRETURN  tIF tELSE tWHILE tTRUE tFALSE
 %token tOP tCP tOB tCB 
 %token tCONST tINT tCOM tSC
-%token tADD tSUB tMUL tDIV tEQ
+%token tADD tSUB tMUL tDIV tEQ tINF tSUP tEQUAL tDIF
 %token <nb> tNB
 %token <var> tID
-%token
 %start Program
 
 %%
@@ -50,7 +49,7 @@ Condition : tTRUE
 Content : | Declarations Content | Affectations Content | BoucleIf Content | BoucleWhile Content ;
 
 
-Printf : tPRINTF tOP C tCP
+/*Printf : tPRINTF tOP C tCP*/
 
 
 
