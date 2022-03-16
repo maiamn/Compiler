@@ -25,6 +25,7 @@
 "*" {return tMUL;}
 "/" {return tDIV;}
 "=" {return tEQ;}
+"!=" {return tDIF;}
 
 [a-z][a-zA-Z0-9_]* {
     strcpy(yyval.str , yytext);
