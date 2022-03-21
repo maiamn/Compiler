@@ -1,3 +1,4 @@
+/* En-tête du fichier */
 #include "ts.h"
 #define SYMBOL_MAX 500
 
