@@ -68,6 +68,16 @@ int ts_get_addr(char id[24] ){
     return addr;
 }
 
+/* Ajouter une variable temporaire */
+void ts_add_tmp(){
+    indice++;
+}
+
+/* Libérer une variable temporaire */
+void ts_free_tmp(){
+    indice--;
+}
+
 /* Afficher la table */
 void ts_print_ts(){
     for (int i=0; i<indice; i++) {

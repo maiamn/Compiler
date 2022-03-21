@@ -25,6 +25,12 @@ void ts_dec_depth();
 /* Récupérer l'adresse d'une variable */
 int ts_get_addr(char id[24]);
 
+/* Ajouter une variable temporaire */
+void ts_add_tmp();
+
+/* Libérer une variable temporaire */
+void ts_free_tmp();
+
 /* Afficher la table */
 void ts_print_ts();
 
