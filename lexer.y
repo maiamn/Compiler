@@ -1,6 +1,8 @@
 %{
 #include <stdlib.h>
 #include <stdio.h>
+#include <asm_table.h>
+#include <ts.h>
 int var[24];
 void yyerror(char *s);
 %}
@@ -32,6 +34,8 @@ DecNext : tID tCOM DecNext
 Affectations : tID tEQ Valeur ;
 Valeur : Valeur tADD Valeur 
     | Valeur tMUL Valeur
+    | Valeur tSUB Valeur
+    | Valeur tDIV Valeur
     | tNB 
     | tID 
     | tOP Valeur tCP;

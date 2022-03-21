@@ -9,13 +9,13 @@ int depth = 0;
 int indice = 0;
 
 /* Initialisation */
-void initS(char id[24]) {
+void ts_initS(char id[24]) {
     int ind = get_addr(id) ; 
     table[ind].init = 1 ;
 }
 
 /* Ajouter un symbole dans la table */
-void add_sym(char id[24], char type[24]){
+void ts_add_sym(char id[24], char type[24]){
     int found = 0;
     for (int i=0; i<indice; i++) {
         if (strcmp(table[i].name,id) == 0) {
@@ -40,12 +40,12 @@ void add_sym(char id[24], char type[24]){
 }
 
 /* Incrémenter la profondeur */
-void inc_depth(){
+void ts_inc_depth(){
     depth++;
 }
 
 /* Décrémenter la profondeur à n-1 et supprimer symboles de profondeur n*/
-void dec_depth(){
+void ts_dec_depth(){
     int n = table[indice-1].depth ;
     
     while (table[indice-1].depth == n) {
@@ -56,7 +56,7 @@ void dec_depth(){
 }
 
 /* Récupérer l'adresse d'une variable */
-int get_addr(char id[24] ){
+int ts_get_addr(char id[24] ){
     int addr ; 
     
     for (int k=0; k<=indice; k++) {
@@ -69,7 +69,7 @@ int get_addr(char id[24] ){
 }
 
 /* Afficher la table */
-void print_ts(){
+void ts_print_ts(){
     for (int i=0; i<indice; i++) {
         printf("Name : %s // Type : %s // Address : %d // Initialized : %d // Depth : %d \n", 
                 table[i].name, 
