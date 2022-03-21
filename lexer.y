@@ -5,7 +5,7 @@ int var[24];
 void yyerror(char *s);
 %}
 
-%union { int nb ; char str[16];}
+%union { int nb ; char str[24];}
 %token tMAIN tPRINTF tRETURN  tIF tELSE tWHILE tTRUE tFALSE
 %token tOP tCP tOB tCB 
 %token tCONST tINT tCOM tSC

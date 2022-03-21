@@ -11,10 +11,10 @@ typedef struct {
 
 
 /* Initialisation */
-void init();
+void initS(char id[24]);
 
 /* Ajouter un symbole dans la table */
-void add_sym(char[24] id, char[16] type);
+void add_sym(char id[24], char type[24]);
 
 /* Incrémenter la profondeur */
 void inc_depth();
@@ -23,7 +23,7 @@ void inc_depth();
 void dec_depth();
 
 /* Récupérer l'adresse d'une variable */
-int get_addr(char[16] id);
+int get_addr(char id[24]);
 
 /* Afficher la table */
 void print_ts();
