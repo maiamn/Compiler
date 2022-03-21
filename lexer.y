@@ -28,15 +28,16 @@ ParamsNext : | tCOM tINT tID ParamsNext ;
 Body : Declarations Content | Content ;
 Declarations : tINT DecNext tSC ; 
 DecNext : tID tCOM DecNext
-        | tID 
+        | tID {ts_add_sym($1)}
         | Affectations 
         | Affectations tCOM DecNext ;
 Affectations : tID tEQ Valeur ;
-Valeur : Valeur tADD Valeur 
-    | Valeur tMUL Valeur
-    | Valeur tSUB Valeur
-    | Valeur tDIV Valeur
-    | tNB 
+Valeur : Valeur tADD Valeur {add_instr3(ADD, $1, $1, $3)}
+    | Valeur tMUL Valeur {add_instr3(MUL, $1, $1, $3)}
+    | Valeur tSUB Valeur {add_instr3(SUB, $1, $1, $3)}
+    | Valeur tDIV Valeur {add_instr3(DIV, $1, $1, $3)}
+    | tNB {ts_add_tmp();
+           asm_add_instr2(AFC, ts_get_last_addr(), $1)}
     | tID 
     | tOP Valeur tCP;
     

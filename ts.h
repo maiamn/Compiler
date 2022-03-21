@@ -25,6 +25,9 @@ void ts_dec_depth();
 /* Récupérer l'adresse d'une variable */
 int ts_get_addr(char id[24]);
 
+/* Récupérer la dernière adresse de la table */
+int ts_get_last_addr();
+
 /* Ajouter une variable temporaire */
 void ts_add_tmp();
 

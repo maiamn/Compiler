@@ -68,6 +68,11 @@ int ts_get_addr(char id[24] ){
     return addr;
 }
 
+/* Récupérer la dernière adresse de la table */
+int ts_get_last_addr() {
+    return indice;
+}
+
 /* Ajouter une variable temporaire */
 void ts_add_tmp(){
     indice++;
