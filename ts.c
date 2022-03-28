@@ -9,34 +9,20 @@ int depth = 0;
 int indice = 0;
 
 /* Initialisation */
-void ts_initS(char id[24]) {
-    int ind = get_addr(id) ; 
+void ts_init(char id[24]) {
+    int ind = ts_get_addr(id) ; 
     table[ind].init = 1 ;
 }
 
 /* Ajouter un symbole dans la table */
 void ts_add_sym(char id[24], char type[24]){
-    int found = 0;
-    for (int i=0; i<indice; i++) {
-        if (strcmp(table[i].name,id) == 0) {
-            found = 1;
-            break;
-        }
-    }
+    strcpy(table[indice].name, id);
+    table[indice].addr = indice;
+    strcpy(table[indice].type, type);
+    table[indice].init = 0;
+    table[indice].depth = depth;  
     
-    if (found == 0){
-
-        strcpy(table[indice].name, id);
-        table[indice].addr = indice;
-        strcpy(table[indice].type, type);
-        table[indice].init = 0;
-        table[indice].depth = depth;  
-        
-        indice++; 
-    } else {
-        perror("[add_sym] Symbol already in the table");
-    }
-
+    indice++; 
 }
 
 /* Incrémenter la profondeur */
@@ -55,11 +41,28 @@ void ts_dec_depth(){
     depth--;
 }
 
+/* Vérifier si la variable existe */
+int ts_exists_sym(char id[24]){
+    int found = 0;
+    int index = indice-1;
+    
+    while (!(found) && index>=0){
+        if((strcmp(table[index].name,id) == 0)){
+            found = 1;
+        }
+        
+        index--;
+    }
+    
+    return found;
+
+}
+
 /* Récupérer l'adresse d'une variable */
 int ts_get_addr(char id[24] ){
     int addr ; 
     
-    for (int k=0; k<=indice; k++) {
+    for (int k=0; k<indice; k++) {
         if (strcmp(table[k].name,id) == 0) {
             addr = table[k].addr;
             break; 
@@ -70,7 +73,7 @@ int ts_get_addr(char id[24] ){
 
 /* Récupérer la dernière adresse de la table */
 int ts_get_last_addr() {
-    return indice;
+    return indice-1;
 }
 
 /* Ajouter une variable temporaire */
@@ -96,19 +99,13 @@ void ts_print_ts(){
     }
 }
 
-// Main 
-void main() {
-    add_sym("titi", "int");
-    initS("titi");
-    inc_depth();
-    add_sym("toto", "string");
-    add_sym("tutu", "char");
-    print_ts();
-    printf("Addr tutu : %d \n", get_addr("tutu"));
-    dec_depth(); 
-    add_sym("tata", "int");
-    add_sym("tete", "string");
-    print_ts();
-
+int ts_get_second_to_last_tmp() {
+    return indice-2;
 }
+
+int ts_get_last_tmp() {
+    return indice-1;
+}
+
+
 

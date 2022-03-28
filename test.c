@@ -1,4 +1,3 @@
-int michel(int a) {
-    while(true) {
-    }
+int michel() {
+    int a=12+4;
 }
