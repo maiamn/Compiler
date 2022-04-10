@@ -11,7 +11,7 @@ void yyerror(char *s);
 %token tMAIN tPRINTF tRETURN  tIF tELSE tWHILE tTRUE tFALSE
 %token tOP tCP tOB tCB 
 %token tCONST tINT tCOM tSC
-%token tADD tSUB tMUL tDIV tEQ tINF tSUP tEQUAL tDIF
+%token tADD tSUB tMUL tDIV tEQ tINF tSUP tEQUAL tDIF tAND tOR
 %token <nb> tNB
 %token <str> tID
 %start Program
@@ -49,25 +49,25 @@ DecNext :  tID {
                     fprintf(stderr,"The variable already exists\n");
                     return 1;
                 }else { 
-                    ts_add_sym($1, "int");} 
+                    ts_add_sym($1, "int");}
                 } ; 
                 
-DecNext : tID tEQ {if (ts_exists_sym($1)){
+DecNext : tID tEQ   { if (ts_exists_sym($1)){
                         fprintf(stderr,"The variable already exists\n");
                         return 1;
-                  } else { 
-                        ts_add_sym($1, "int");
-                  }}                
-                  Expr {
+                    } else { 
+                        ts_add_sym($1, "int");}
+                    }                
+                    Expr {
                         asm_add_copy(ts_get_addr($1)); 
                         ts_init($1);
-                  }; 
+                    } ; 
 
 DecNext : tID tEQ Expr tCOM DecNext { 
                 if (ts_exists_sym($1)){
                     fprintf(stderr,"The variable already exists\n");
                     return 1;
-                }else { 
+                } else { 
                     ts_add_sym($1, "int");
                     asm_add_copy(ts_get_addr($1)); 
                     ts_init($1);
@@ -95,21 +95,27 @@ Affectations : tID tEQ Expr tSC {
 Expr : Expr tADD Expr { 
                         asm_add_arith(ADD);
                       } ;
+
 Expr : Expr tMUL Expr {
                         asm_add_arith(MUL);
                       } ;
+
 Expr : Expr tSUB Expr {
                         asm_add_arith(SUB);
                       } ;
+
 Expr : Expr tDIV Expr {
                         asm_add_arith(DIV);
                       } ;
+
 Expr : tNB {ts_add_tmp();
            asm_add_instr2(AFC, ts_get_last_addr(), $1);} ;
+
 Expr : tID  { 
             ts_add_tmp();
             asm_add_instr2(COP, ts_get_last_addr(), ts_get_addr($1));
             };
+            
 Expr : tOP Expr tCP;
     
 BoucleIf : tIF tOP Condition tCP tOB Content tCB SuiteIf ;
@@ -122,7 +128,10 @@ Condition : tTRUE
            | tFALSE;
            /* A COMPLETER */
 
-Content : | Declarations Content | Affectations Content | BoucleIf Content | BoucleWhile Content ;
+Content :   | Declarations Content 
+            | Affectations Content 
+            | BoucleIf Content 
+            | BoucleWhile Content ;
 
 
 /*Printf : tPRINTF tOP C tCP*/

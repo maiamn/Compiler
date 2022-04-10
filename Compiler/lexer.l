@@ -35,6 +35,8 @@
 ">" {return tSUP;}
 "==" {return tEQUAL;}
 "!=" {return tDIF;}
+"and" {return tAND;}
+"or" {return tOR;} 
 
 [a-z][a-zA-Z0-9_]* {
     strcpy(yylval.str , yytext);
