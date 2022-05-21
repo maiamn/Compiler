@@ -21,7 +21,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.std_logic_signed.ALL;
+use IEEE.std_logic_unsigned.ALL;
 use IEEE.numeric_std.ALL;
 
 -- Uncomment the following library declaration if using
@@ -34,8 +34,7 @@ use IEEE.numeric_std.ALL;
 --use UNISIM.VComponents.all;
 
 entity UAL is
-    Port ( CK : in STD_LOGIC;
-           A : in STD_LOGIC_VECTOR (7 downto 0);
+    Port ( A : in STD_LOGIC_VECTOR (7 downto 0);
            B : in STD_LOGIC_VECTOR (7 downto 0);
            Ctrl_Alu : in STD_LOGIC_VECTOR (2 downto 0);
            S : out STD_LOGIC_VECTOR (7 downto 0);
@@ -59,38 +58,41 @@ architecture Behavioral of UAL is
     signal S_add : STD_LOGIC_VECTOR (8 downto 0) := (others => '0') ; 
     signal S_mul : STD_LOGIC_VECTOR (15 downto 0) := (others => '0') ; 
     signal S_sub : STD_LOGIC_VECTOR (8 downto 0) := (others => '0') ; 
+    signal S_div : STD_LOGIC_VECTOR (7 downto 0) := (others => '0') ;
 
 begin
 
-    process
-    begin 
-        wait until rising_edge(CK) ;
-        Aux_A <= A;
-        Aux_B <= B;
-        S <= Aux_S;
-        N <= Aux_N;
-        O <= Aux_O;
-        Z <= Aux_Z;
-        C <= Aux_C;
-    end process ;
-    
+    Aux_A <= A;
+    Aux_B <= B;
+    S <= Aux_S;
+    N <= Aux_N;
+    O <= Aux_O;
+    Z <= Aux_Z;
+    C <= Aux_C;
 
     -- ADD
     S_add <= ('0'&Aux_A) + ('0'&Aux_B); 
-    Aux_C <= S_add(8) ; 
     
     -- MUL 
     S_mul <= Aux_A*Aux_B;
-    Aux_O <= '1' when S_mul (15 downto 8)/=X"00" else '0';
     
     -- SUB
     S_sub <= ('0'&Aux_A) - ('0'&Aux_B); 
-    Aux_N <= S_sub(8);
     
-    -- Result 
+    -- DIV
+    S_div <= shr(A, "1");
+    
+    -- Result
     Aux_S <= S_add (7 downto 0) when Ctrl_Alu= "001" else 
              S_mul (7 downto 0) when Ctrl_Alu= "010" else
-             S_sub (7 downto 0) when Ctrl_Alu= "011" ;
+             S_sub (7 downto 0) when Ctrl_Alu= "011" else
+             S_div (7 downto 0) when Ctrl_Alu= "100";
+             
+    Aux_Z <= '1' when Aux_S="00" else '0';
+    
+    Aux_C <= Aux_S(7) when Ctrl_Alu="001" else '0'; 
+    Aux_O <= '1' when (S_mul(15 downto 8)/=X"00") else '0';
+    Aux_N <= Aux_S(7) when Ctrl_Alu="011" else '0';  
     
 
 end Behavioral;

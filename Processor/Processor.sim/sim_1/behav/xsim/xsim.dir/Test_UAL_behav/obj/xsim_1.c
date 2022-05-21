@@ -44,7 +44,14 @@
 #endif
 typedef void (*funcp)(char *, char *);
 extern void execute_52(char*, char *);
-extern void execute_53(char*, char *);
+extern void execute_36(char*, char *);
+extern void execute_37(char*, char *);
+extern void execute_38(char*, char *);
+extern void execute_39(char*, char *);
+extern void execute_40(char*, char *);
+extern void execute_41(char*, char *);
+extern void execute_42(char*, char *);
+extern void execute_43(char*, char *);
 extern void execute_44(char*, char *);
 extern void execute_45(char*, char *);
 extern void execute_46(char*, char *);
@@ -53,16 +60,15 @@ extern void execute_48(char*, char *);
 extern void execute_49(char*, char *);
 extern void execute_50(char*, char *);
 extern void execute_51(char*, char *);
-extern void transaction_0(char*, char*, unsigned, unsigned, unsigned);
 extern void vhdl_transfunc_eventcallback(char*, char*, unsigned, unsigned, unsigned, char *);
-funcp funcTab[12] = {(funcp)execute_52, (funcp)execute_53, (funcp)execute_44, (funcp)execute_45, (funcp)execute_46, (funcp)execute_47, (funcp)execute_48, (funcp)execute_49, (funcp)execute_50, (funcp)execute_51, (funcp)transaction_0, (funcp)vhdl_transfunc_eventcallback};
-const int NumRelocateId= 12;
+funcp funcTab[18] = {(funcp)execute_52, (funcp)execute_36, (funcp)execute_37, (funcp)execute_38, (funcp)execute_39, (funcp)execute_40, (funcp)execute_41, (funcp)execute_42, (funcp)execute_43, (funcp)execute_44, (funcp)execute_45, (funcp)execute_46, (funcp)execute_47, (funcp)execute_48, (funcp)execute_49, (funcp)execute_50, (funcp)execute_51, (funcp)vhdl_transfunc_eventcallback};
+const int NumRelocateId= 18;
 
 void relocate(char *dp)
 {
-	iki_relocate(dp, "xsim.dir/Test_UAL_behav/xsim.reloc",  (void **)funcTab, 12);
-	iki_vhdl_file_variable_register(dp + 5584);
-	iki_vhdl_file_variable_register(dp + 5640);
+	iki_relocate(dp, "xsim.dir/Test_UAL_behav/xsim.reloc",  (void **)funcTab, 18);
+	iki_vhdl_file_variable_register(dp + 5592);
+	iki_vhdl_file_variable_register(dp + 5648);
 
 
 	/*Populate the transaction function pointer field in the whole net structure */

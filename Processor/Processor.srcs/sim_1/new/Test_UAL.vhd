@@ -38,8 +38,7 @@ end Test_UAL;
 architecture Behavioral of Test_UAL is
 
 component UAL 
-Port ( CK : in STD_LOGIC;
-       A : in STD_LOGIC_VECTOR (7 downto 0);
+Port ( A : in STD_LOGIC_VECTOR (7 downto 0);
        B : in STD_LOGIC_VECTOR (7 downto 0);
        Ctrl_Alu : in STD_LOGIC_VECTOR (2 downto 0);
        S : out STD_LOGIC_VECTOR (7 downto 0);
@@ -50,9 +49,8 @@ Port ( CK : in STD_LOGIC;
 end component;
 
 -- Inputs
-signal my_CK : STD_LOGIC := '0' ; 
-signal my_A : STD_LOGIC_VECTOR (7 downto 0) := "00000010";
-signal my_B : STD_LOGIC_VECTOR (7 downto 0) := "00000001"; 
+signal my_A : STD_LOGIC_VECTOR (7 downto 0) := "11111111";
+signal my_B : STD_LOGIC_VECTOR (7 downto 0) := "11111111"; 
 signal my_Ctrl_Alu : STD_LOGIC_VECTOR (2 downto 0) := (others => '0') ; 
 
 -- Outputs
@@ -62,11 +60,9 @@ signal my_O : STD_LOGIC ;
 signal my_Z : STD_LOGIC ;
 signal my_C : STD_LOGIC ;
 
-constant Clock_period : time := 10 ns;
 
 begin
 Label_uut : UAL PORT MAP(
-    CK => my_CK,
     A => my_A, 
     B => my_B, 
     Ctrl_Alu => my_Ctrl_Alu, 
@@ -77,14 +73,9 @@ Label_uut : UAL PORT MAP(
     C => my_C
 );
 
-Clock_process : process
-begin 
-    my_CK <= not(my_CK);
-    wait for Clock_period/2; 
-end process;
-
 -- Stimulus process 
-my_Ctrl_Alu <= "001" after 00ns, "010" after 40ns, "011" after 80ns;
+my_Ctrl_Alu <= "001" after 00ns, "010" after 40ns, "011" after 80ns, "100" after 120ns;
+
 
 
 end;
