@@ -3,52 +3,44 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="Test_UAL_behav.wdb" id="1">
+      <db_ref path="Test_CD_behav.wdb" id="1">
          <top_modules>
-            <top_module name="Test_UAL" />
+            <top_module name="Test_CD" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="322593902fs"></ZoomEndTime>
-      <Cursor1Time time="1000000000fs"></Cursor1Time>
+      <ZoomEndTime time="128000001fs"></ZoomEndTime>
+      <Cursor1Time time="83200000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="134"></ValueColumnWidth>
+      <ValueColumnWidth column_width="130"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="8" />
-   <wvobject type="array" fp_name="/Test_UAL/my_A">
-      <obj_property name="ElementShortName">my_A[7:0]</obj_property>
-      <obj_property name="ObjectShortName">my_A[7:0]</obj_property>
+   <WVObjectSize size="6" />
+   <wvobject type="logic" fp_name="/Test_CD/my_CD_CLK">
+      <obj_property name="ElementShortName">my_CD_CLK</obj_property>
+      <obj_property name="ObjectShortName">my_CD_CLK</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/Test_UAL/my_B">
-      <obj_property name="ElementShortName">my_B[7:0]</obj_property>
-      <obj_property name="ObjectShortName">my_B[7:0]</obj_property>
+   <wvobject type="logic" fp_name="/Test_CD/my_CD_RST">
+      <obj_property name="ElementShortName">my_CD_RST</obj_property>
+      <obj_property name="ObjectShortName">my_CD_RST</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/Test_UAL/my_Ctrl_Alu">
-      <obj_property name="ElementShortName">my_Ctrl_Alu[2:0]</obj_property>
-      <obj_property name="ObjectShortName">my_Ctrl_Alu[2:0]</obj_property>
+   <wvobject type="array" fp_name="/Test_CD/my_OUTB">
+      <obj_property name="ElementShortName">my_OUTB[7:0]</obj_property>
+      <obj_property name="ObjectShortName">my_OUTB[7:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/Test_UAL/my_S">
-      <obj_property name="ElementShortName">my_S[7:0]</obj_property>
-      <obj_property name="ObjectShortName">my_S[7:0]</obj_property>
+   <wvobject type="other" fp_name="/Test_CD/Clock_period">
+      <obj_property name="ElementShortName">Clock_period</obj_property>
+      <obj_property name="ObjectShortName">Clock_period</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/Test_UAL/my_N">
-      <obj_property name="ElementShortName">my_N</obj_property>
-      <obj_property name="ObjectShortName">my_N</obj_property>
+   <wvobject type="array" fp_name="/Test_CD/Label_uut/my_br/registers">
+      <obj_property name="ElementShortName">registers[0:15][7:0]</obj_property>
+      <obj_property name="ObjectShortName">registers[0:15][7:0]</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/Test_UAL/my_O">
-      <obj_property name="ElementShortName">my_O</obj_property>
-      <obj_property name="ObjectShortName">my_O</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/Test_UAL/my_Z">
-      <obj_property name="ElementShortName">my_Z</obj_property>
-      <obj_property name="ObjectShortName">my_Z</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/Test_UAL/my_C">
-      <obj_property name="ElementShortName">my_C</obj_property>
-      <obj_property name="ObjectShortName">my_C</obj_property>
+   <wvobject type="array" fp_name="/Test_CD/Label_uut/my_br/DATA">
+      <obj_property name="ElementShortName">DATA[7:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA[7:0]</obj_property>
    </wvobject>
 </wave_config>

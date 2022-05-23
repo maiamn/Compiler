@@ -21,6 +21,8 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_unsigned.ALL;
+use IEEE.numeric_std.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -78,7 +80,7 @@ component BM_instr
 end component;
 
 
--- Signaux intermédiaires
+-- Signaux composants
 signal UAL_A : STD_LOGIC_VECTOR (7 downto 0);
 signal UAL_B : STD_LOGIC_VECTOR (7 downto 0);
 signal UAL_Ctrl : STD_LOGIC_VECTOR (2 downto 0);
@@ -103,7 +105,15 @@ signal BMD_OUT_data : STD_LOGIC_VECTOR (7 downto 0);
 
 signal BMI_ADDR : STD_LOGIC_VECTOR (7 downto 0);
 signal BMI_CLK : STD_LOGIC;
-signal BMI_OUT_instr : STD_LOGIC_VECTOR (31 downto 0);
+signal BMI_OUT_instr : STD_LOGIC_VECTOR (31 downto 0) := (others => '0') ; 
+
+-- Signaux intermédiaires 
+signal op1, a1, b1, c1 : STD_LOGIC_VECTOR(7 downto 0);
+signal op2, a2, b2, c2 : STD_LOGIC_VECTOR(7 downto 0);
+signal op3, a3, b3, c3 : STD_LOGIC_VECTOR(7 downto 0);
+signal op4, a4, b4, c4 : STD_LOGIC_VECTOR(7 downto 0);
+
+
 
 begin
     my_ual: UAL PORT MAP(
@@ -122,58 +132,97 @@ begin
         W_addr => BR_W_addr, 
         W => BR_W, 
         DATA => BR_DATA, 
+        CLK => CD_CLK,
+        RST => CD_RST,
         QA => BR_QA, 
         QB => BR_QB);
         
-    bm_data : BM_data port map(
+    my_bm_data : BM_data port map(
         ADDR => BMD_ADDR, 
         IN_data => BMD_IN_data, 
         RW => BMD_RW,
+        CLK => CD_CLK, 
+        RST => CD_RST,
         OUT_data => BMD_OUT_data);
         
-    bm_instr : BM_instr port map(
+    my_bm_instr : BM_instr port map(
         ADDR => BMI_ADDR, 
+        CLK => CD_CLK,
         OUT_instr => BMI_OUT_instr);  
     
+    
     -- 1st - LI/DI
-    process (CLK)
+    process (CD_CLK)
     begin
         -- wait until rising edge
-        if (CLK'Event and CLK='1') then
-        
+        if (CD_CLK'Event and CD_CLK='1') then
+            if (CD_RST='0') then 
+                BMI_ADDR <= (others => '0'); 
+            else 
+                op1 <= BMI_OUT_instr(31 downto 24);
+                a1 <= BMI_OUT_instr(23 downto 16);
+                b1 <= BMI_OUT_instr(15 downto 8);
+                c1 <= BMI_OUT_instr(7 downto 0);
+                if (BMI_ADDR/="11111111") then
+                    BMI_ADDR <= STD_LOGIC_VECTOR(unsigned(BMI_ADDR) +1); 
+                end if;
+            end if;
         end if;
     end process;
     
     
     -- 2nd - DI/EX
-    process (CLK)
+    process (CD_CLK)
     begin
         -- wait until rising edge
-        if (CLK'Event and CLK='1') then
-        
+        if (CD_CLK'Event and CD_CLK='1') then
+            -- AFC 
+            if(op1 = "00000110") then
+                b2 <= b1;
+            else
+                BR_A_addr <= b1(3 downto 0);
+                BR_DATA <= b4;
+                b2 <= BR_QA; 
+            end if;
+            -- Read / Write 
+            if (op4="00000110" or op4="00000101") then 
+                BR_W <= '1'; -- write
+            else 
+                BR_W <= '0'; -- read
+            end if;
+            a2 <= a1;
+            op2 <= op1; 
+            BR_W_addr <= a4(3 downto 0); 
+            
         end if;
     end process;
     
         
     -- 3rd - EX/Mem
-    process (CLK)
+    process (CD_CLK)
     begin
         -- wait until rising edge
-        if (CLK'Event and CLK='1') then
-        
+        if (CD_CLK'Event and CD_CLK='1') then
+            a3 <= a2;
+            b3 <= b2;
+            op3 <= op2; 
         end if;
     end process;
     
     
     -- 4th - Mem/RE
-    process (CLK)
+    process (CD_CLK)
     begin
         -- wait until rising edge
-        if (CLK'Event and CLK='1') then
-        
+        if (CD_CLK'Event and CD_CLK='1') then
+            a4 <= a3;
+            b4 <= b3;
+            op4 <= op3; 
+            
         end if;
     end process;
 
-
+    
+    OUTB <= b4;
 
 end Behavioral;

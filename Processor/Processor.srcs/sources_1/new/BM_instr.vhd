@@ -44,6 +44,11 @@ type bank_instr is array (0 to 255) of STD_LOGIC_VECTOR(31 downto 0);
 signal mem_instr : bank_instr; 
 
 begin
+
+  mem_instr(0) <= "00000110000000000000011100000000";
+  mem_instr(1) <= "00000110000000010000100000000000";
+  mem_instr(2) <= "00000110000000100000100100000000";
+  mem_instr(3) <= "00000101000000010000001100000000";
         
   -- READ
   OUT_instr <= mem_instr(to_integer(unsigned(ADDR)));
