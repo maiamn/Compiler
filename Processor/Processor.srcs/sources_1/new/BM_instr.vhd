@@ -41,16 +41,16 @@ end BM_instr;
 architecture Behavioral of BM_instr is
 
 type bank_instr is array (0 to 255) of STD_LOGIC_VECTOR(31 downto 0); 
-signal mem_instr : bank_instr; 
+signal mem_instr : bank_instr := (
+        1 => "00000110" & "00000000" & "00000111" & "00000000", 
+        2 => "00000110" & "00000001" & "00001000" & "00000000", 
+        3 => "00000110" & "00000010" & "00001001" & "00000000",
+        4 => "00000001" & "00000011" & "00000000" & "00000001", 
+        others => (others => '0'));  
 
 begin
-
-  mem_instr(0) <= "00000110000000000000011100000000";
-  mem_instr(1) <= "00000110000000010000100000000000";
-  mem_instr(2) <= "00000110000000100000100100000000";
-  mem_instr(3) <= "00000101000000010000001100000000";
-        
-  -- READ
-  OUT_instr <= mem_instr(to_integer(unsigned(ADDR)));
+    
+    -- READ
+    OUT_instr <= mem_instr(to_integer(unsigned(ADDR)));
 
 end Behavioral;

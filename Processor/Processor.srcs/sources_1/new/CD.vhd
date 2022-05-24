@@ -41,6 +41,18 @@ end CD;
 
 architecture Behavioral of CD is
 
+-- Constant
+constant NOP : STD_LOGIC_VECTOR(7 downto 0) := "00000000"; 
+constant ADD : STD_LOGIC_VECTOR(7 downto 0) := "00000001";
+constant MUL : STD_LOGIC_VECTOR(7 downto 0) := "00000010";
+constant SOU : STD_LOGIC_VECTOR(7 downto 0) := "00000011";
+constant DIV : STD_LOGIC_VECTOR(7 downto 0) := "00000100";
+constant COP : STD_LOGIC_VECTOR(7 downto 0) := "00000101";
+constant AFC : STD_LOGIC_VECTOR(7 downto 0) := "00000110";
+constant LOAD : STD_LOGIC_VECTOR(7 downto 0) := "00000111";
+constant STORE : STD_LOGIC_VECTOR(7 downto 0) := "00001000";
+
+
 component BR
     Port ( A_addr : in STD_LOGIC_VECTOR (3 downto 0);
            B_addr : in STD_LOGIC_VECTOR (3 downto 0);
@@ -90,28 +102,56 @@ signal UAL_O : STD_LOGIC;
 signal UAL_Z : STD_LOGIC;
 signal UAL_C : STD_LOGIC;
 
-signal BR_A_addr : STD_LOGIC_VECTOR (3 downto 0);
-signal BR_B_addr : STD_LOGIC_VECTOR (3 downto 0);
-signal BR_W_addr : STD_LOGIC_VECTOR (3 downto 0);
-signal BR_W : STD_LOGIC;
-signal BR_DATA : STD_LOGIC_VECTOR (7 downto 0);
+signal BR_A_addr : STD_LOGIC_VECTOR (3 downto 0) := (others => '0') ;
+signal BR_B_addr : STD_LOGIC_VECTOR (3 downto 0) := (others => '0') ;
+signal BR_W_addr : STD_LOGIC_VECTOR (3 downto 0) := (others => '0') ;
+signal BR_W : STD_LOGIC := '0';
+signal BR_DATA : STD_LOGIC_VECTOR (7 downto 0) := (others => '0') ;
 signal BR_QA : STD_LOGIC_VECTOR (7 downto 0);
 signal BR_QB : STD_LOGIC_VECTOR (7 downto 0);
 
-signal BMD_ADDR : STD_LOGIC_VECTOR (7 downto 0);
-signal BMD_IN_data : STD_LOGIC_VECTOR (7 downto 0);
-signal BMD_RW : STD_LOGIC;
+signal BMD_ADDR : STD_LOGIC_VECTOR (7 downto 0) := (others => '0') ;
+signal BMD_IN_data : STD_LOGIC_VECTOR (7 downto 0) := (others => '0') ;
+signal BMD_RW : STD_LOGIC := '1';
 signal BMD_OUT_data : STD_LOGIC_VECTOR (7 downto 0);
 
-signal BMI_ADDR : STD_LOGIC_VECTOR (7 downto 0);
+signal BMI_ADDR : STD_LOGIC_VECTOR (7 downto 0) := (others => '0') ;
 signal BMI_CLK : STD_LOGIC;
 signal BMI_OUT_instr : STD_LOGIC_VECTOR (31 downto 0) := (others => '0') ; 
 
+
 -- Signaux intermédiaires 
-signal op1, a1, b1, c1 : STD_LOGIC_VECTOR(7 downto 0);
-signal op2, a2, b2, c2 : STD_LOGIC_VECTOR(7 downto 0);
-signal op3, a3, b3, c3 : STD_LOGIC_VECTOR(7 downto 0);
-signal op4, a4, b4, c4 : STD_LOGIC_VECTOR(7 downto 0);
+signal IP : STD_LOGIC_VECTOR(7 downto 0) := (others => '0'); 
+
+signal op1_in : STD_LOGIC_VECTOR(7 downto 0) := NOP;
+signal a1_in, b1_in, c1_in : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+signal op1_out : STD_LOGIC_VECTOR(7 downto 0) := NOP;
+signal a1_out, b1_out, c1_out : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+
+signal op2_in : STD_LOGIC_VECTOR(7 downto 0) := NOP;
+signal a2_in, b2_in, c2_in : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+signal op2_out : STD_LOGIC_VECTOR(7 downto 0) := NOP;
+signal a2_out, b2_out, c2_out : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+
+signal op3_in : STD_LOGIC_VECTOR(7 downto 0) := NOP;
+signal a3_in, b3_in : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+signal op3_out : STD_LOGIC_VECTOR(7 downto 0) := NOP;
+signal a3_out, b3_out : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+
+signal op4_in : STD_LOGIC_VECTOR(7 downto 0) := NOP;
+signal a4_in, b4_in: STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+signal op4_out : STD_LOGIC_VECTOR(7 downto 0) := NOP;
+signal a4_out, b4_out : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+
+
+-- MUX
+signal MUX1 : STD_LOGIC_VECTOR(8 downto 0) := "100111110"; 
+signal MUX2 : STD_LOGIC_VECTOR(8 downto 0) := "000011110";
+signal MUX3 : STD_LOGIC_VECTOR(8 downto 0) := "010000000";
+signal MUX4 : STD_LOGIC_VECTOR(8 downto 0) := "100000000"; 
+
+signal LC3 : STD_LOGIC_VECTOR(8 downto 0) := "011111111"; 
+signal LC4 : STD_LOGIC_VECTOR(8 downto 0) := "011111110"; 
 
 
 
@@ -149,80 +189,80 @@ begin
         ADDR => BMI_ADDR, 
         CLK => CD_CLK,
         OUT_instr => BMI_OUT_instr);  
-    
-    
-    -- 1st - LI/DI
-    process (CD_CLK)
-    begin
-        -- wait until rising edge
-        if (CD_CLK'Event and CD_CLK='1') then
-            if (CD_RST='0') then 
-                BMI_ADDR <= (others => '0'); 
-            else 
-                op1 <= BMI_OUT_instr(31 downto 24);
-                a1 <= BMI_OUT_instr(23 downto 16);
-                b1 <= BMI_OUT_instr(15 downto 8);
-                c1 <= BMI_OUT_instr(7 downto 0);
-                if (BMI_ADDR/="11111111") then
-                    BMI_ADDR <= STD_LOGIC_VECTOR(unsigned(BMI_ADDR) +1); 
-                end if;
-            end if;
-        end if;
-    end process;
-    
-    
-    -- 2nd - DI/EX
-    process (CD_CLK)
-    begin
-        -- wait until rising edge
-        if (CD_CLK'Event and CD_CLK='1') then
-            -- AFC 
-            if(op1 = "00000110") then
-                b2 <= b1;
-            else
-                BR_A_addr <= b1(3 downto 0);
-                BR_DATA <= b4;
-                b2 <= BR_QA; 
-            end if;
-            -- Read / Write 
-            if (op4="00000110" or op4="00000101") then 
-                BR_W <= '1'; -- write
-            else 
-                BR_W <= '0'; -- read
-            end if;
-            a2 <= a1;
-            op2 <= op1; 
-            BR_W_addr <= a4(3 downto 0); 
-            
-        end if;
-    end process;
-    
-        
-    -- 3rd - EX/Mem
-    process (CD_CLK)
-    begin
-        -- wait until rising edge
-        if (CD_CLK'Event and CD_CLK='1') then
-            a3 <= a2;
-            b3 <= b2;
-            op3 <= op2; 
-        end if;
-    end process;
-    
-    
-    -- 4th - Mem/RE
-    process (CD_CLK)
-    begin
-        -- wait until rising edge
-        if (CD_CLK'Event and CD_CLK='1') then
-            a4 <= a3;
-            b4 <= b3;
-            op4 <= op3; 
-            
-        end if;
-    end process;
 
+   -- IP
+   BMI_ADDR <= IP; 
     
-    OUTB <= b4;
+    -- Etage 1 
+    op1_in <= BMI_OUT_instr(31 downto 24);
+    a1_in <= BMI_OUT_instr(23 downto 16);
+    b1_in <= BMI_OUT_instr(15 downto 8); 
+    c1_in <= BMI_OUT_instr(7 downto 0); 
+    
+    op1_out <= op1_in; 
+    a1_out <= a1_in; 
+    b1_out <= b1_in; 
+    c1_out <= c1_in; 
+    
+    -- BR 
+    BR_A_addr <= b1_out(3 downto 0);
+    BR_B_addr <= c1_out(3 downto 0);
+    BR_W_addr <= a4_out(3 downto 0);
+    BR_W <= LC4(to_integer(unsigned(op4_out)));
+    BR_DATA <= b4_out;
+    
+    -- Etage 2 
+    op2_in <= op1_out;
+    a2_in <= a1_out;
+    b2_in <= BR_QA when (MUX1(to_integer(unsigned(op1_out)))='1') else b1_out;
+    c2_in <= BR_QB; 
+    
+    -- ALU
+    UAL_A <= b2_out ; 
+    UAL_B <= c2_out;
+    UAL_Ctrl <= op2_out(2 downto 0); --LC
+    
+    -- Etage 3
+    op3_in <= op2_out; 
+    a3_in <= a2_out; 
+    b3_in <= UAL_S when (MUX2(to_integer(unsigned(op2_out)))='1') else b2_out;
+    
+    -- BM
+    BMD_ADDR <= a3_out when (MUX4(to_integer(unsigned(op3_out)))='1') else b3_out; 
+    BMD_IN_data <= b3_out; 
+    BMD_RW <= LC3(to_integer(unsigned(op3_out)));
+    
+    -- Etage 4
+    op4_in <= op3_out;
+    a4_in <= a3_out;
+    b4_in <= BMD_OUT_data when (MUX3(to_integer(unsigned(op3_out)))='1') else b3_out; 
+    
+
+    -- Elements à réaliser en séquentiel 
+    process (CD_CLK)
+    begin 
+        if (CD_CLK'Event and CD_CLK='1') then 
+            -- Etage 4 
+            op4_out <= op4_in;
+            a4_out <= a4_in; 
+            b4_out <= b4_in;
+            
+            -- Etage 3
+            op3_out <= op3_in ;
+            a3_out <= a3_in; 
+            b3_out <= b3_in; 
+            
+            -- Etage 2
+            op2_out <= op2_in;
+            a2_out <= a2_in;
+            b2_out <= b2_in; 
+            c2_out <= c2_in;
+            
+            IP <= IP+1; 
+            
+        end if; 
+    end process; 
+
+    OUTB <= b4_out;
 
 end Behavioral;
