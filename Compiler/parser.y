@@ -12,6 +12,7 @@ void yyerror(char *s);
 %token tOP tCP tOB tCB 
 %token tCONST tINT tCOM tSC
 %token tADD tSUB tMUL tDIV tEQ tINF tSUP tEQUAL tDIF tAND tOR
+%token tCOMMENT
 %token <nb> tNB
 %token <str> tID
 %start Program

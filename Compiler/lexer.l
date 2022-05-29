@@ -37,6 +37,7 @@
 "!=" {return tDIF;}
 "and" {return tAND;}
 "or" {return tOR;} 
+"[\/]{2}.*" {return tCOMMENT;}
 
 [a-z][a-zA-Z0-9_]* {
     strcpy(yylval.str , yytext);
