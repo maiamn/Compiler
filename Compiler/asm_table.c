@@ -43,12 +43,14 @@ char* asm_op_toString(Operator op){
 void asm_add_arith(Operator op) {
     asm_add_instr3(op, ts_get_second_to_last_tmp(), ts_get_second_to_last_tmp(), ts_get_last_tmp());
     ts_free_tmp();
+    indice_ti++;
 }
 
 /* Ajout d'une instruction copy dans la table */
 void asm_add_copy(int addr) {
     asm_add_instr2(COP, addr, ts_get_last_tmp());
     ts_free_tmp();
+    indice_ti++;
 }
 
 /* Afficher la table */
