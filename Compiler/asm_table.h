@@ -1,7 +1,11 @@
 #ifndef ASM_TABLE_H
 #define ASM_TABLE_H
 
-typedef enum Operator {ADD, MUL, SUB, DIV, COP, AFC, JMP, JMF, INF, SUP, EQU, PRI} Operator; 
+typedef enum Operator {ADD, MUL, SUB, DIV, 
+                       COP, AFC, 
+                       JMP, JMF, 
+                       INF, SUP, EQU, AND, OR, 
+                       PRI} Operator; 
 
 typedef struct Instr {
     Operator op;
