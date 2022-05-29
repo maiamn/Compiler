@@ -28,11 +28,12 @@ Body : tOB Content tCB {
 Content : | Instruction Content ; 
 
 Instruction : Declaration 
-              | Affectations
+              | Affectation
               | LoopIf
               | LoopWhile
-              | Printf
-              | Return ; 
+              | Print
+              | Return 
+              | tCOMMENT ; 
 
 
 
@@ -41,7 +42,6 @@ Instruction : Declaration
 /*************************************************************************/
 
 Declaration : tINT DecNext tSC ; 
-
 
 DecNext : tID tCOM DecNext { 
                 if (ts_exists_sym($1)){
@@ -65,12 +65,12 @@ DecNext : tID tEQ   { if (ts_exists_sym($1)){
                     } else { 
                         ts_add_sym($1, "int");}
                     }                
-                    Expr {
+                    Arith_Expr {
                         asm_add_copy(ts_get_addr($1)); 
                         ts_init($1);
                     } ; 
 
-DecNext : tID tEQ Expr tCOM DecNext { 
+DecNext : tID tEQ Arith_Expr tCOM DecNext { 
                 if (ts_exists_sym($1)){
                     fprintf(stderr,"The variable already exists\n");
                     return 1;
@@ -79,7 +79,6 @@ DecNext : tID tEQ Expr tCOM DecNext {
                     asm_add_copy(ts_get_addr($1)); 
                     ts_init($1);
                 }} ; 
-
 
 
 
@@ -103,7 +102,6 @@ SuiteIf : | tELSE Body
           | tELSE tIF tOP Condition tCP Body SuiteIf;
 
 
-
 /*************************************************************************/
 /******************************* LOOP WHILE ******************************/
 /*************************************************************************/
@@ -114,12 +112,18 @@ BoucleWhile : tWHILE tOP Condition tCP Body ;
 /*************************************************************************/
 /********************************** PRINT ********************************/
 /*************************************************************************/
+Print : tPRINTF tOP Condition {
 
+        } tCP tSC {
+
+        }
 
 /*************************************************************************/
 /********************************** RETURN ********************************/
 /*************************************************************************/
+Return : tRETURN Condition {
 
+        } tSC; 
 
 
 /*************************************************************************/
@@ -160,15 +164,42 @@ Arith_Expr : tOP Arith_Expr tCP;
 /************************* EXPRESSIONS BOOLEENNES ************************/
 /*************************************************************************/
 
-Condition : Bool_Expr tAND Bool_Expr
-            | Bool_Expr tOR Bool_Expr ; 
+Condition : Bool_Expr tAND Bool_Expr {
+                ts_free_tmp();
+                int temp = ts_add_tmp();
+                asm_add_instr3(AND, temp, $1, $3);
+                if ($3 != temp) {
+                    ts_free_tmp();
+                }
+                $$=temp;
+            }
+            | Bool_Expr tOR Bool_Expr {
+                ts_free_tmp();
+                int temp = ts_add_tmp();
+                asm_add_instr3(OR, temp, $1, $3);
+                if ($3 != temp) {
+                    ts_free_tmp();
+                }
+                $$=temp;
+            }
+            | Bool_Expr {
+                $$ = $1;
+            }; 
 
 Bool_Expr : tTRUE
             | tFALSE
-            | Arith_Expr tINF Arith_Expr
-            | Arith_Expr tSUP Arith_Expr
-            | Arith_Expr tEQUAL Arith_Expr
-            | Arith_Expr tDIF Arith_Expr ;
+            | Arith_Expr tINF Arith_Expr {
+
+            }
+            | Arith_Expr tSUP Arith_Expr {
+
+            }
+            | Arith_Expr tEQUAL Arith_Expr {
+
+            }
+            | Arith_Expr tDIF Arith_Expr {
+
+            };
 
 
 %%
