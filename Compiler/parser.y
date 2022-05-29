@@ -18,22 +18,28 @@ void yyerror(char *s);
 
 %%
 
-Program : Funs ;
-Funs : | Fun Funs ;
-Fun : tINT tID tOP Params tCP tOB Body tCB ;
+Program : tINT tMAIN tOP tCP Body ;
 
-Params : | tINT tID ParamsNext ;
-ParamsNext : | tCOM tINT tID ParamsNext ;
+Body : tOB Content tCB {
+                        ts_inc_depth(); 
+                       } ;
 
-Body : Declarations Content | Content ;
+Content : | Instruction Content ; 
+
+Instruction : Declaration 
+              | Affectations
+              | LoopIf
+              | LoopWhile
+              | Printf
+              | Return ; 
 
 
 
 /*************************************************************************/
-/***************************** DECLARATIONS ******************************/
+/****************************** DECLARATION ******************************/
 /*************************************************************************/
 
-Declarations : tINT DecNext tSC ; 
+Declaration : tINT DecNext tSC ; 
 
 
 DecNext : tID tCOM DecNext { 
@@ -77,10 +83,10 @@ DecNext : tID tEQ Expr tCOM DecNext {
 
 
 /*************************************************************************/
-/***************************** AFFECTATIONS ******************************/
+/****************************** AFFECTATION ******************************/
 /*************************************************************************/
 
-Affectations : tID tEQ Expr tSC { 
+Affectation : tID tEQ Expr tSC { 
                                 asm_add_copy(ts_get_addr($1)); 
                                 ts_init($1);
                                 };
@@ -88,56 +94,80 @@ Affectations : tID tEQ Expr tSC {
 
 
 /*************************************************************************/
-/****************************** EXPRESSIONS ******************************/
+/********************************* LOOP IF *******************************/
+/*************************************************************************/
+                                
+LoopIf : tIF tOP Condition tCP Body SuiteIf ;
+SuiteIf : | tELSE Body
+          | tELSE tIF tOP Condition tCP Body SuiteIf;
+
+
+
+/*************************************************************************/
+/******************************* LOOP WHILE ******************************/
+/*************************************************************************/
+
+BoucleWhile : tWHILE tOP Condition tCP Body ;
+
+
+/*************************************************************************/
+/********************************** PRINT ********************************/
 /*************************************************************************/
 
 
-Expr : Expr tADD Expr { 
-                        asm_add_arith(ADD);
-                      } ;
+/*************************************************************************/
+/********************************** RETURN ********************************/
+/*************************************************************************/
 
-Expr : Expr tMUL Expr {
-                        asm_add_arith(MUL);
-                      } ;
 
-Expr : Expr tSUB Expr {
-                        asm_add_arith(SUB);
-                      } ;
 
-Expr : Expr tDIV Expr {
-                        asm_add_arith(DIV);
-                      } ;
+/*************************************************************************/
+/*********************** EXPRESSIONS ARITHMETIQUES ***********************/
+/*************************************************************************/
 
-Expr : tNB {ts_add_tmp();
-           asm_add_instr2(AFC, ts_get_last_addr(), $1);} ;
+Arith_Expr : Arith_Expr tADD Arith_Expr {
+                                            asm_add_arith(ADD);
+                                        } ;
 
-Expr : tID  { 
-            ts_add_tmp();
-            asm_add_instr2(COP, ts_get_last_addr(), ts_get_addr($1));
-            };
+Arith_Expr : Arith_Expr tMUL Arith_Expr {
+                                            asm_add_arith(MUL);
+                                        } ;
+
+Arith_Expr : Arith_Expr tSUB Arith_Expr {
+                                            asm_add_arith(SUB);
+                                        } ;
+
+Arith_Expr : Arith_Expr tDIV Arith_Expr {
+                                        asm_add_arith(DIV);
+                                        } ;
+
+Arith_Expr : tNB {
+                    ts_add_tmp();
+                    asm_add_instr2(AFC, ts_get_last_addr(), $1);
+                 } ;
+
+Arith_Expr : tID { 
+                    ts_add_tmp();
+                    asm_add_instr2(COP, ts_get_last_addr(), ts_get_addr($1));
+                 };
             
-Expr : tOP Expr tCP;
-    
-BoucleIf : tIF tOP Condition tCP tOB Content tCB SuiteIf ;
-SuiteIf : | tELSE tOB Content tCB
-          | tELSE tIF tOP Condition tCP tOB Content tCB SuiteIf;
-
-BoucleWhile : tWHILE tOP Condition tCP tOB Content tCB Content ;
-
-Condition : tTRUE
-           | tFALSE;
-           /* A COMPLETER */
-
-Content :   | Declarations Content 
-            | Affectations Content 
-            | BoucleIf Content 
-            | BoucleWhile Content ;
-
-
-/*Printf : tPRINTF tOP C tCP*/
+Arith_Expr : tOP Arith_Expr tCP;
 
 
 
+/*************************************************************************/
+/************************* EXPRESSIONS BOOLEENNES ************************/
+/*************************************************************************/
+
+Condition : Bool_Expr tAND Bool_Expr
+            | Bool_Expr tOR Bool_Expr ; 
+
+Bool_Expr : tTRUE
+            | tFALSE
+            | Arith_Expr tINF Arith_Expr
+            | Arith_Expr tSUP Arith_Expr
+            | Arith_Expr tEQUAL Arith_Expr
+            | Arith_Expr tDIF Arith_Expr ;
 
 
 %%
