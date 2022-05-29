@@ -130,33 +130,51 @@ Return : tRETURN Condition {
 /*********************** EXPRESSIONS ARITHMETIQUES ***********************/
 /*************************************************************************/
 
-Arith_Expr : Arith_Expr tADD Arith_Expr {
-                                            asm_add_arith(ADD);
-                                        } ;
+Arith_Expr : MD {
+                $$ = $1
+             } 
+             | Arith_Expr tADD MD {
+                ts_free_tmp();
+                ts_add_tmp();
+                asm_add_instr3(ADD);
+                $$=ts_get_last_addr();
+             }
+             | Arith_Expr tSUB MD {
+                ts_free_tmp();
+                ts_add_tmp();
+                asm_add_instr3(SUB);
+                $$=ts_get_last_addr();
+             } ;
 
-Arith_Expr : Arith_Expr tMUL Arith_Expr {
-                                            asm_add_arith(MUL);
-                                        } ;
+MD : Element {
+        $$ = $1
+     }
+     | MD tMUL Element {
+        ts_free_tmp();
+        ts_add_tmp();
+        asm_add_instr3(MUL);
+        $$=ts_get_last_addr();
+$$=temp;
+     }  
+     | MD tDIV Element {
+        ts_free_tmp();
+        ts_add_tmp();
+        asm_add_instr3(DIV);
+        $$=ts_get_last_addr();
+     } 
 
-Arith_Expr : Arith_Expr tSUB Arith_Expr {
-                                            asm_add_arith(SUB);
-                                        } ;
+Element : Term 
+          | tOP Term tCP ; 
 
-Arith_Expr : Arith_Expr tDIV Arith_Expr {
-                                        asm_add_arith(DIV);
-                                        } ;
-
-Arith_Expr : tNB {
-                    ts_add_tmp();
-                    asm_add_instr2(AFC, ts_get_last_addr(), $1);
-                 } ;
-
-Arith_Expr : tID { 
-                    ts_add_tmp();
-                    asm_add_instr2(COP, ts_get_last_addr(), ts_get_addr($1));
-                 };
-            
-Arith_Expr : tOP Arith_Expr tCP;
+Element : tNB {
+            ts_add_tmp();
+            asm_add_instr2(AFC, ts_get_last_addr(), $1);
+          }
+          | tID {
+            ts_add_tmp();
+            asm_add_instr2(COP, ts_get_last_addr(), ts_get_addr($1));        
+          }
+          | tOP Element tCP ;
 
 
 
@@ -166,21 +184,15 @@ Arith_Expr : tOP Arith_Expr tCP;
 
 Condition : Bool_Expr tAND Bool_Expr {
                 ts_free_tmp();
-                int temp = ts_add_tmp();
+                ts_add_tmp();
                 asm_add_instr3(AND, temp, $1, $3);
-                if ($3 != temp) {
-                    ts_free_tmp();
-                }
-                $$=temp;
+                $$=ts_get_last_addr();
             }
             | Bool_Expr tOR Bool_Expr {
                 ts_free_tmp();
-                int temp = ts_add_tmp();
+                ts_add_tmp();
                 asm_add_instr3(OR, temp, $1, $3);
-                if ($3 != temp) {
-                    ts_free_tmp();
-                }
-                $$=temp;
+                $$=ts_get_last_addr();
             }
             | Bool_Expr {
                 $$ = $1;
