@@ -42,6 +42,9 @@ int ts_get_last_tmp() ;
 /* Libérer une variable temporaire */
 void ts_free_tmp();
 
+/* Vider la table des symboles */
+void ts_free_all();
+
 /* Afficher la table */
 void ts_print_ts();
 

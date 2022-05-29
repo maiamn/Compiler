@@ -86,6 +86,11 @@ void ts_free_tmp(){
     indice--;
 }
 
+/* Vider la table des symboles */ 
+void ts_free_all(){
+    indice=0;
+} 
+
 /* Afficher la table */
 void ts_print_ts(){
     for (int i=0; i<indice; i++) {
