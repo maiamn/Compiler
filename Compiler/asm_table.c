@@ -32,51 +32,11 @@ void asm_add_instr3(Operator op, int op1, int op2, int op3){
 
 }
 
-//XXX char *op2str[] = {[ADD]="ADD", [SUB]="SUB"};
-
 /* operator toString */
+char *opToStr[] = {[ADD]="ADD",[MUL]="MUL",[SUB]="SUB",[DIV]="DIV",[COP]="COP",[AFC]="AFC",[JMP]="JMF",[JMF]="JMF",[INF]="INF",[SUP]="SUP",[EQU]="EQU",[PRI]="PRI"}
+
 char* asm_op_toString(Operator op){
-//XXX    return op2str[op];
-    char* op_str ;
-    switch(op) {
-        case ADD : 
-            op_str="ADD";
-            break;
-        case MUL : 
-            op_str="MUL";
-            break;
-        case SUB : 
-            op_str="SUB";
-            break;
-        case DIV : 
-            op_str="DIV";
-            break;
-        case COP : 
-            op_str="COP";
-            break;
-        case AFC : 
-            op_str="AFC";
-            break;
-        case JMP : 
-            op_str="JMP";
-            break;
-        case JMF : 
-            op_str="JMF";
-            break;
-        case INF : 
-            op_str="INF";
-            break;
-        case SUP : 
-            op_str="SUP";
-            break;
-        case EQU : 
-            op_str="EQU";
-            break;
-        case PRI : 
-            op_str="PRI";
-            break;
-    }
-    return op_str;
+    return opToStr[op];
 }
 
 /* Ajout d'une instruction arithmétique dans la table */
