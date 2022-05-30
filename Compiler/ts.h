@@ -13,6 +13,9 @@ typedef struct {
 /* Initialisation */
 void ts_init(char id[24]);
 
+/* Is initialized */
+int ts_is_init(char id[24]) ;
+
 /* Ajouter un symbole dans la table */
 void ts_add_sym(char id[24], char type[24]);
 

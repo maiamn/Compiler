@@ -1,3 +1,8 @@
+#include "ts.h"
+#include "asm_table.h"
+#include <stdlib.h> 
+#include <stdio.h> 
+
 int main(){
     extern int yydebug;
     yydebug = 1;

@@ -2,6 +2,7 @@
 #include "stdio.h"
 #include "string.h"
 #include "asm_table.h"
+#include "ts.h" 
 #define INSTR_MAX 1024
 
 /* Variables globales */

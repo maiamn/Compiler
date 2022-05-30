@@ -14,6 +14,12 @@ void ts_init(char id[24]) {
     table[ind].init = 1 ;
 }
 
+/* Is initialized */
+int ts_is_init(char id[24]) {
+    int ind=ts_get_addr(id);
+    return table[ind].init; 
+}  
+
 /* Ajouter un symbole dans la table */
 void ts_add_sym(char id[24], char type[24]){
     strcpy(table[indice].name, id);

@@ -28,7 +28,10 @@ Content : | Instruction Content ;
 
 Instruction : Declaration
             | Affectation 
-            | LoopIf;     
+            | LoopIf 
+            | LoopWhile 
+            | Print 
+            | tCOMMENT ;     
 
 
 
@@ -139,7 +142,7 @@ Term : tNB {
       | tID {
             ts_add_tmp();
             asm_add_instr2(COP, ts_get_last_addr(), ts_get_addr($1));
-            $$ = $1;
+            $$ = ts_get_addr($1);
         }  
       | tOP Arith_Expr tCP ;   
 
@@ -193,6 +196,21 @@ Bool_Expr : tTRUE {
                 asm_add_arith(EQU);
                 $$ = ts_get_last_addr();
            } ;     
+
+/*************************************************************************/
+/********************************* PRINT *********************************/
+/*************************************************************************/
+Print : tPRINTF tOP tNB tCP tSC {
+            asm_add_instr1(PRI, $3);
+        } 
+        | tPRINTF tOP tID tCP tSC {
+            if (ts_is_init($3)==0){
+                fprintf(stderr,"The variable is not initialized\n");
+                return 1;
+            } else { 
+                asm_add_instr1(PRI, ts_get_addr($3));
+            } 
+        }  ;
 
 
 %%
