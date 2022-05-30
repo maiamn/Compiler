@@ -3,6 +3,6 @@ int main(){
     yydebug = 1;
     yyparse();
     asm_print_table();
-    printf("xxxxxxx\n");
+    printf("####################\n");
     ts_print_ts();
 }

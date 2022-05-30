@@ -10,7 +10,7 @@ int indice_ti = 0 ;
 
 /* Ajout d'une instruction avec 1 paramètre */
 void asm_add_instr1(Operator op, int op1){
-    Instr newIns = {op, op1};
+    Instr newIns = {op, op1, -1, -1};
     asm_table[indice_ti] = newIns;
     indice_ti++;
 
@@ -18,7 +18,7 @@ void asm_add_instr1(Operator op, int op1){
 
 /* Ajout d'une instruction avec 2 paramètres */
 void asm_add_instr2(Operator op, int op1, int op2){
-    Instr newIns = {op, op1, op2};
+    Instr newIns = {op, op1, op2, -1} ;
     asm_table[indice_ti] = newIns;
     indice_ti++;
 
@@ -33,7 +33,8 @@ void asm_add_instr3(Operator op, int op1, int op2, int op3){
 }
 
 /* operator toString */
-char *opToStr[] = {[ADD]="ADD",[MUL]="MUL",[SUB]="SUB",[DIV]="DIV",[COP]="COP",[AFC]="AFC",[JMP]="JMF",[JMF]="JMF",[INF]="INF",[SUP]="SUP",[EQU]="EQU",[PRI]="PRI"}
+char *opToStr[] = {[ADD]="ADD",[MUL]="MUL",[SUB]="SUB",[DIV]="DIV",[COP]="COP",[AFC]="AFC",
+                   [JMP]="JMF",[JMF]="JMF",[INF]="INF",[SUP]="SUP",[EQU]="EQU",[PRI]="PRI"};
 
 char* asm_op_toString(Operator op){
     return opToStr[op];
@@ -43,14 +44,12 @@ char* asm_op_toString(Operator op){
 void asm_add_arith(Operator op) {
     asm_add_instr3(op, ts_get_second_to_last_tmp(), ts_get_second_to_last_tmp(), ts_get_last_tmp());
     ts_free_tmp();
-    indice_ti++;
 }
 
 /* Ajout d'une instruction copy dans la table */
 void asm_add_copy(int addr) {
     asm_add_instr2(COP, addr, ts_get_last_tmp());
     ts_free_tmp();
-    indice_ti++;
 }
 
 /* Afficher la table */

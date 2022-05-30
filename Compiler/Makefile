@@ -1,4 +1,4 @@
-GRM=lexer.y
+GRM=parser.y
 LEX=lexer.l
 BIN=comp
 
