@@ -34,7 +34,7 @@ void asm_add_instr3(Operator op, int op1, int op2, int op3){
 
 /* operator toString */
 char *opToStr[] = {[ADD]="ADD",[MUL]="MUL",[SUB]="SUB",[DIV]="DIV",[COP]="COP",[AFC]="AFC",
-                   [JMP]="JMF",[JMF]="JMF",[INF]="INF",[SUP]="SUP",[EQU]="EQU",[PRI]="PRI"};
+                   [JMP]="JMF",[JMF]="JMF",[INF]="INF",[SUP]="SUP",[DIF]="DIF", [EQU]="EQU",[PRI]="PRI"};
 
 char* asm_op_toString(Operator op){
     return opToStr[op];

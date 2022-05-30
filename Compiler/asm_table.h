@@ -4,7 +4,7 @@
 typedef enum Operator {ADD, MUL, SUB, DIV, 
                        COP, AFC, 
                        JMP, JMF, 
-                       INF, SUP, EQU, AND, OR, 
+                       INF, SUP, EQU, DIF, AND, OR, 
                        PRI} Operator; 
 
 typedef struct Instr {

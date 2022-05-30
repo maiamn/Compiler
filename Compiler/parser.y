@@ -15,7 +15,7 @@ void yyerror(char *s);
 %token tCOMMENT
 %token <nb> tNB
 %token <str> tID
-%type <nb> Arith_Expr Factor Term
+%type <nb> Arith_Expr Factor Term Condition Bool_Expr
 %start Program
 
 %%
@@ -27,7 +27,8 @@ Body : tOB Content tCB ;
 Content : | Instruction Content ;
 
 Instruction : Declaration
-            | Affectation ;     
+            | Affectation 
+            | LoopIf;     
 
 
 
@@ -81,7 +82,21 @@ Affectation : tID tEQ Arith_Expr tSC {
 
 
 /*************************************************************************/
-/****************************** EXPRESSIONS ******************************/
+/******************************** LOOP IF ********************************/
+/*************************************************************************/
+LoopIf : tIF tOP Condition tCP Body IfNext ; 
+IfNext : | tELSE Body
+         | tELSE tIF tOP Condition tCP Body IfNext ; 
+
+
+/*************************************************************************/
+/****************************** LOOP WHILE *******************************/
+/*************************************************************************/
+LoopWhile : tWHILE tOP Condition tCP Body ; 
+
+
+/*************************************************************************/
+/*********************** EXPRESSIONS ARITHMETIQUES ***********************/
 /*************************************************************************/
 
 Arith_Expr : Factor {
@@ -126,7 +141,58 @@ Term : tNB {
             asm_add_instr2(COP, ts_get_last_addr(), ts_get_addr($1));
             $$ = $1;
         }  
-      | tOP Arith_Expr tCP ;    
+      | tOP Arith_Expr tCP ;   
+
+
+/*************************************************************************/
+/************************* EXPRESSIONS BOOLEENNES ************************/
+/*************************************************************************/ 
+Condition : Bool_Expr {
+                $$ = $1;
+            } 
+           | Bool_Expr tAND Bool_Expr {
+               ts_free_tmp();
+               ts_add_tmp();
+               asm_add_arith(AND);
+               $$ = ts_get_last_addr();
+           } 
+           | Bool_Expr tOR Bool_Expr {
+               ts_free_tmp();
+               ts_add_tmp();
+               asm_add_arith(OR);
+               $$ = ts_get_last_addr();
+           } ;
+
+Bool_Expr : tTRUE {
+                $$ = 1;
+            }    
+           | tFALSE {
+               $$ = 0;
+           } 
+           | Arith_Expr tINF Arith_Expr {
+                ts_free_tmp();
+                ts_add_tmp();
+                asm_add_arith(INF);
+                $$ = ts_get_last_addr();
+           } 
+           | Arith_Expr tSUP Arith_Expr {
+                ts_free_tmp();
+                ts_add_tmp();
+                asm_add_arith(SUP);
+                $$ = ts_get_last_addr();
+           } 
+           | Arith_Expr tDIF Arith_Expr {
+                ts_free_tmp();
+                ts_add_tmp();
+                asm_add_arith(DIF);
+                $$ = ts_get_last_addr();
+           } 
+           | Arith_Expr tEQUAL Arith_Expr {
+                ts_free_tmp();
+                ts_add_tmp();
+                asm_add_arith(EQU);
+                $$ = ts_get_last_addr();
+           } ;     
 
 
 %%
