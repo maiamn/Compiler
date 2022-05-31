@@ -59,15 +59,20 @@ void asm_add_copy(int addr) {
 /* Modification des valeurs des jump */ 
 void asm_update_jmp(int to_modify, int new_val) {
     Instr to_be_modified = asm_table[to_modify];
-    Intr newInstr = {to_be_modified.op, 
+    Instr newInstr = (Instr) {to_be_modified.op, 
                      new_val, 
                      to_be_modified.op2, 
-                     to_be_modified.op3} 
+                     to_be_modified.op3} ;
     asm_table[to_modify] = newInstr;
 } 
 
 void asm_update_jmf(int to_modify, int new_val) {
-
+    Instr to_be_modified = asm_table[to_modify];
+    Instr newInstr = (Instr) {to_be_modified.op, 
+                     to_be_modified.op1, 
+                     new_val, 
+                     to_be_modified.op3} ;
+    asm_table[to_modify] = newInstr;
 } 
 
 

@@ -3,7 +3,10 @@
 #include <stdlib.h> 
 #include <stdio.h> 
 
-int main(){
+int main(int argc, char **argv){
+    if (argc!=1){
+        printf("ERREUR");
+    } 
     extern int yydebug;
     yydebug = 1;
     yyparse();
