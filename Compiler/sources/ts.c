@@ -1,7 +1,9 @@
 /* En-tête du fichier */
-#include "stdio.h"
-#include "string.h"
-#include "ts.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "../include/ts.h"
+
+/* Definition */ 
 #define SYMBOL_MAX 500
 
 Symbol table[SYMBOL_MAX];

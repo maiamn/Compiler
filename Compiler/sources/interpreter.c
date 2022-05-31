@@ -1,5 +1,9 @@
-#include "interpreter.h"
-#include "asm_table.h"
+/* En-tête du fichier */
+#include <stdio.h>
+#include <stdlib.h>
+#include "../include/interpreter.h"
+#include "../include/asm_table.h"
+/* Definition */ 
 #define INSTR_MAX 1024
 #define MEM_MAX 500
 Instr asm_table[INSTR_MAX];

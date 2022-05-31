@@ -1,8 +1,10 @@
 /* En-tête du fichier */
-#include "stdio.h"
-#include "string.h"
-#include "asm_table.h"
-#include "ts.h" 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h> 
+#include "../include/asm_table.h"
+#include "../include/ts.h" 
+/* Definition */ 
 #define INSTR_MAX 1024
 
 /* Variables globales */

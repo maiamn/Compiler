@@ -1,8 +1,9 @@
 %{
 #include <stdlib.h>
 #include <stdio.h>
-#include "asm_table.h"
-#include "ts.h"
+#include "./include/asm_table.h"
+#include "./include/ts.h"
+#include "./include/jump.h" 
 int var[24];
 void yyerror(char *s);
 %}

@@ -1,5 +1,5 @@
-#include "ts.h"
-#include "asm_table.h"
+#include "./include/ts.h"
+#include "./include/asm_table.h"
 #include <stdlib.h> 
 #include <stdio.h> 
 
