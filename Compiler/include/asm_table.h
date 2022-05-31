@@ -15,18 +15,23 @@ typedef struct Instr {
 } Instr;
 
 
-
+/* Add insutrctions */ 
 void asm_add_instr1(Operator op, int op1);
 void asm_add_instr2(Operator op, int op1, int op2);
 void asm_add_instr3(Operator op, int op1, int op2, int op3);
 
 void asm_add_arith(Operator op);
-
 void asm_add_copy(int addr);
 
-void asm_print_table(); 
+/* Update jump operation */ 
+void asm_update_jmp(int to_modify, int new_val);
+void asm_update_jmf(int to_modify, int new_val);
 
+/* Print table */ 
+void asm_print_table(); 
 char* asm_op_toString(Operator op);
+
+
 
 
 #endif

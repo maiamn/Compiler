@@ -55,6 +55,22 @@ void asm_add_copy(int addr) {
     ts_free_tmp();
 }
 
+
+/* Modification des valeurs des jump */ 
+void asm_update_jmp(int to_modify, int new_val) {
+    Instr to_be_modified = asm_table[to_modify];
+    Intr newInstr = {to_be_modified.op, 
+                     new_val, 
+                     to_be_modified.op2, 
+                     to_be_modified.op3} 
+    asm_table[to_modify] = newInstr;
+} 
+
+void asm_update_jmf(int to_modify, int new_val) {
+
+} 
+
+
 /* Afficher la table */
 void asm_print_table(){
     for (int i=0; i<indice_ti; i++) {
