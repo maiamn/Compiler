@@ -15,7 +15,7 @@ void yyerror(char *s);
 %token tCOMMENT
 %token <nb> tNB
 %token <str> tID
-%type <nb> Arith_Expr Factor Term Condition Bool_Expr
+%type <nb> Arith_Expr Factor Term Condition Bool_Expr 
 %start Program
 
 %%
@@ -31,6 +31,7 @@ Instruction : Declaration
             | LoopIf 
             | LoopWhile 
             | Print 
+            | Return 
             | tCOMMENT ;     
 
 
@@ -68,8 +69,6 @@ DecNext : tID tEQ   { if (ts_exists_sym($1)){
                         asm_add_copy(ts_get_addr($1)); 
                         ts_init($1);
                     } ; 
-
-
 
 
 
@@ -212,6 +211,14 @@ Print : tPRINTF tOP tNB tCP tSC {
             } 
         }  ;
 
+/*************************************************************************/
+/******************************** RETURN *********************************/
+/*************************************************************************/
+Return : tRETURN Expr tSC {
+            ts_free_all(); 
+         } ; 
+
+Expr : Arith_Expr | Bool_Expr ;  
 
 %%
 
