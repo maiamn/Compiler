@@ -154,6 +154,29 @@ signal LC3 : STD_LOGIC_VECTOR(8 downto 0) := "011111111";
 signal LC4 : STD_LOGIC_VECTOR(8 downto 0) := "011111110"; 
 
 
+-- Aléa
+signal alea_risk_write_4 : STD_LOGIC := '0';
+signal alea_risk_write_3 : STD_LOGIC := '0';
+signal alea_risk_write_2 : STD_LOGIC := '0';
+
+signal alea_risk_read_3 : STD_LOGIC := '0';
+signal alea_risk_read_2 : STD_LOGIC := '0';
+signal alea_risk_read_1 : STD_LOGIC := '0';
+
+signal alea_3_4 : STD_LOGIC := '0';
+signal alea_2_3 : STD_LOGIC := '0';
+signal alea_1_2 : STD_LOGIC := '0';
+
+signal alea_a4_in : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+signal alea_a3_in : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+signal alea_a2_in : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+
+signal alea_b3_in : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+signal alea_b2_in : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+signal alea_c2_in : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+signal alea_b1_in : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+signal alea_c1_in : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+
 
 begin
     my_ual: UAL PORT MAP(
@@ -237,6 +260,37 @@ begin
     a4_in <= a3_out;
     b4_in <= BMD_OUT_data when (MUX3(to_integer(unsigned(op3_out)))='1') else b3_out; 
     
+    -- Aléas
+        -- Write
+    alea_risk_write_4 <= '0' when (op4_in = NOP or op4_in = STORE) else '1';
+    alea_a4_in <= a4_in; -- registre où on écrit
+    
+    alea_risk_write_3 <= '0' when (op3_in = NOP or op3_in = STORE) else '1';
+    alea_a3_in <= a3_in; -- registre où on écrit
+    
+    alea_risk_write_2 <= '0' when (op2_in = NOP or op2_in = STORE) else '1';
+    alea_a2_in <= a2_in; -- registre où on écrit
+    
+        -- Read
+    alea_risk_read_3 <= '0' when (op3_in = NOP or op3_in = AFC or op3_in = LOAD) else '1';
+    alea_b3_in <= b3_in;
+    
+    alea_risk_read_2 <= '0' when (op2_in = NOP or op2_in = AFC or op2_in = LOAD) else '1';
+    alea_b2_in <= b2_in;
+    alea_c2_in <= c2_in;
+    
+    alea_risk_read_1 <= '0' when (op1_in = NOP or op1_in = AFC or op1_in = LOAD) else '1';
+    alea_b1_in <= b1_in;
+    alea_c1_in <= c1_in;
+    
+        -- Ecriture suivi de lecture + même registre ?
+    alea_3_4 <= '1' when (alea_risk_read_3 = '1' and alea_risk_write_4 = '1' and alea_a4_in=alea_b3_in) else '0';
+    
+    alea_2_3 <= '1' when (alea_risk_read_2 = '1' and alea_risk_write_3 = '1' and alea_a3_in=alea_b2_in) else '0';
+    alea_2_3 <= '1' when (alea_risk_read_2 = '1' and alea_risk_write_3 = '1' and alea_a3_in=alea_c2_in) else '0';
+    
+    alea_1_2 <= '1' when (alea_risk_read_1 = '1' and alea_risk_write_2 = '1' and alea_a2_in=alea_b1_in) else '0';
+    alea_1_2 <= '1' when (alea_risk_read_1 = '1' and alea_risk_write_2 = '1' and alea_a2_in=alea_c1_in) else '0';
 
     -- Elements à réaliser en séquentiel 
     process (CD_CLK)
@@ -247,18 +301,36 @@ begin
             a4_out <= a4_in; 
             b4_out <= b4_in;
             
-            -- Etage 3
-            op3_out <= op3_in ;
-            a3_out <= a3_in; 
-            b3_out <= b3_in; 
+--            -- Etage 3
+--            op3_out <= op3_in ;
+--            a3_out <= a3_in; 
+--            b3_out <= b3_in;
             
-            -- Etage 2
-            op2_out <= op2_in;
-            a2_out <= a2_in;
-            b2_out <= b2_in; 
-            c2_out <= c2_in;
+            if(alea_3_4 = '0') then
+                -- Etage 3
+                op3_out <= op3_in ;
+                a3_out <= a3_in; 
+                b3_out <= b3_in; 
+             else
+                op3_out <= NOP;
+                a3_out <= "00000000"; 
+                b3_out <= "00000000"; 
+             end if;
             
-            IP <= IP+1; 
+            if(alea_2_3 = '1' or alea_1_2 = '1' or alea_3_4 = '1') then
+                op2_out <= NOP;
+                a2_out <= "00000000";
+                b2_out <= "00000000"; 
+                c2_out <= "00000000";
+            else
+                -- Etage 2
+                op2_out <= op2_in;
+                a2_out <= a2_in;
+                b2_out <= b2_in; 
+                c2_out <= c2_in;
+                            
+                IP <= IP+1; 
+            end if;
             
         end if; 
     end process; 

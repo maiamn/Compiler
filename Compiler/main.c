@@ -13,4 +13,5 @@ int main(int argc, char **argv){
     asm_print_table();
     printf("####################\n");
     ts_print_ts();
+    //ts_print_all();
 }

@@ -23,6 +23,9 @@ void asm_add_instr3(Operator op, int op1, int op2, int op3);
 void asm_add_arith(Operator op);
 void asm_add_copy(int addr);
 
+/* Get instruction line */ 
+int asm_get_index(); 
+
 /* Update jump operation */ 
 void asm_update_jmp(int to_modify, int new_val);
 void asm_update_jmf(int to_modify, int new_val);

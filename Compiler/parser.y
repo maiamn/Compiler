@@ -23,7 +23,12 @@ void yyerror(char *s);
 
 Program : tINT tID tOP tCP Body ;
 
-Body : tOB Content tCB ;
+/*Body : tOB {
+            ts_inc_depth();
+       } Content tCB {
+           ts_dec_depth();
+       };*/ 
+Body : tOB Content tCB; 
 
 Content : | Instruction Content ;
 
@@ -87,15 +92,46 @@ Affectation : tID tEQ Arith_Expr tSC {
 /*************************************************************************/
 /******************************** LOOP IF ********************************/
 /*************************************************************************/
-LoopIf : tIF tOP Condition tCP Body IfNext ; 
-IfNext : | tELSE Body
-         | tELSE tIF tOP Condition tCP Body IfNext ; 
+LoopIf : tIF tOP Condition {    
+            ts_free_tmp(); 
+         }
+         tCP {
+            jump_add_if(asm_get_index());
+            asm_add_instr2(JMF, $3, -1);
+         }
+         Body IfNext ; 
+
+IfNext : tELSE {
+             jump_add_else(asm_get_index());
+             asm_add_instr1(JMP, -1);
+             asm_update_jmf(jump_pop_if(), asm_get_index());
+         }
+         Body {
+             asm_update_jmp(jump_pop_else(), asm_get_index()); 
+         }
+         | { asm_update_jmf(jump_pop_if(), asm_get_index()); }; 
+
+
+
+/* | tELSE tIF tOP Condition tCP Body IfNext ; */ 
 
 
 /*************************************************************************/
 /****************************** LOOP WHILE *******************************/
 /*************************************************************************/
-LoopWhile : tWHILE tOP Condition tCP Body ; 
+LoopWhile : tWHILE tOP {
+                jump_add_while(asm_get_index());
+            }
+            Condition {
+                ts_free_tmp();
+            } tCP {
+                jump_add_if(asm_get_index());
+                asm_add_instr2(JMF, $4, -1);
+            }
+            Body {
+                asm_add_instr1(JMP, jump_pop_while());
+                asm_update_jmf(jump_pop_if(), asm_get_index());
+            }; 
 
 
 /*************************************************************************/

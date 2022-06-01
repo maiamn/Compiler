@@ -44,7 +44,7 @@ end BM_data;
 architecture Behavioral of BM_data is
 
 type bank_data is array (0 to 255) of STD_LOGIC_VECTOR(7 downto 0); 
-signal mem_data : bank_data; 
+signal mem_data : bank_data;
 
 begin
 
@@ -61,16 +61,13 @@ process (CLK)
             -- WRITE 
             elsif (RW='0') then
                 mem_data(to_integer(unsigned(ADDR))) <= IN_data;
-            
-            -- READ
-            else 
-                OUT_data <= mem_data(to_integer(unsigned(ADDR)));
-            
+      
             end if;           
         end if;
     
     end process;
-
-
+    
+    -- READ
+    OUT_data <= mem_data(to_integer(unsigned(ADDR)));
 
 end Behavioral;

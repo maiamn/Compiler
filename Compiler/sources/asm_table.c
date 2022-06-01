@@ -36,8 +36,11 @@ void asm_add_instr3(Operator op, int op1, int op2, int op3){
 }
 
 /* operator toString */
-char *opToStr[] = {[ADD]="ADD",[MUL]="MUL",[SUB]="SUB",[DIV]="DIV",[COP]="COP",[AFC]="AFC",
-                   [JMP]="JMF",[JMF]="JMF",[INF]="INF",[SUP]="SUP",[DIF]="DIF", [EQU]="EQU",[PRI]="PRI"};
+char *opToStr[] = {[ADD]="ADD",[MUL]="MUL",[SUB]="SUB",[DIV]="DIV",
+                   [COP]="COP",[AFC]="AFC",
+                   [JMP]="JMP",[JMF]="JMF",
+                   [INF]="INF",[SUP]="SUP",[DIF]="DIF", [EQU]="EQU",[AND]="AND",[OR]="OR",
+                   [PRI]="PRI"};
 
 char* asm_op_toString(Operator op){
     return opToStr[op];
@@ -55,6 +58,10 @@ void asm_add_copy(int addr) {
     ts_free_tmp();
 }
 
+/* Get instruction line */ 
+int asm_get_index() {
+    return indice_ti;
+}
 
 /* Modification des valeurs des jump */ 
 void asm_update_jmp(int to_modify, int new_val) {

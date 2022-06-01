@@ -35,8 +35,8 @@
 ">" {return tSUP;}
 "==" {return tEQUAL;}
 "!=" {return tDIF;}
-"and" {return tAND;}
-"or" {return tOR;} 
+"&&" {return tAND;}
+"||" {return tOR;} 
 "[\/]{2}.*" {return tCOMMENT;}
 
 [a-z][a-zA-Z0-9_]* {

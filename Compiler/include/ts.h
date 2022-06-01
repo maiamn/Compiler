@@ -50,5 +50,6 @@ void ts_free_all();
 
 /* Afficher la table */
 void ts_print_ts();
+void ts_print_all();
 
 #endif

@@ -112,6 +112,18 @@ void ts_print_ts(){
     }
 }
 
+void ts_print_all() {
+    for (int i=0; i<15 ; i++) {
+        printf("Name : %s // Type : %s // Address : %d // Initialized : %d // Depth : %d \n", 
+                table[i].name, 
+                table[i].type, 
+                table[i].addr, 
+                table[i].init, 
+                table[i].depth);
+
+    }    
+}
+
 int ts_get_second_to_last_tmp() {
     return indice-2;
 }
