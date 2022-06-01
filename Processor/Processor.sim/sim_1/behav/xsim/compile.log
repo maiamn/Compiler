@@ -347,3 +347,25 @@ INFO: [VRFC 10-163] Analyzing VHDL file "/home/berthele/Bureau/PSI_git/Compiler/
 INFO: [VRFC 10-307] analyzing entity BM_instr
 INFO: [VRFC 10-163] Analyzing VHDL file "/home/berthele/Bureau/PSI_git/Compiler/Processor/Processor.srcs/sources_1/new/BM_instr.vhd" into library xil_defaultlib
 INFO: [VRFC 10-307] analyzing entity BM_instr
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.srcs/sources_1/new/BM_data.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity BM_data
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.srcs/sources_1/new/BM_instr.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity BM_instr
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.srcs/sources_1/new/BR.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity BR
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.srcs/sources_1/new/CD.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity CD
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.srcs/sources_1/new/UAL.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity UAL
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.srcs/sim_1/new/Test_CD.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity Test_CD
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.srcs/sources_1/new/CD.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity CD
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.srcs/sources_1/new/CD.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity CD
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.srcs/sources_1/new/BM_instr.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity BM_instr
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.srcs/sources_1/new/CD.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity CD
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.srcs/sources_1/new/CD.vhd" into library xil_defaultlib
+INFO: [VRFC 10-307] analyzing entity CD

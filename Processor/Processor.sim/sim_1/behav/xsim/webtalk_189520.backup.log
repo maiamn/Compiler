@@ -2,11 +2,12 @@
 # Webtalk v2018.2 (64-bit)
 # SW Build 2258646 on Thu Jun 14 20:02:38 MDT 2018
 # IP Build 2256618 on Thu Jun 14 22:10:49 MDT 2018
-# Start of session at: Tue May 24 14:49:22 2022
-# Process ID: 7746
+# Start of session at: Wed Jun  1 18:08:51 2022
+# Process ID: 189520
 # Current directory: /home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.sim/sim_1/behav/xsim
 # Command line: wbtcv -mode batch -source /home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.sim/sim_1/behav/xsim/xsim.dir/Test_CD_behav/webtalk/xsim_webtalk.tcl -notrace
 # Log file: /home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.sim/sim_1/behav/xsim/webtalk.log
 # Journal file: /home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.sim/sim_1/behav/xsim/webtalk.jou
 #-----------------------------------------------------------
 source /home/mmangin/Documents/4A/S8/PSI/Compiler/Processor/Processor.sim/sim_1/behav/xsim/xsim.dir/Test_CD_behav/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Wed Jun  1 18:08:52 2022...
