@@ -46,6 +46,7 @@ char* asm_op_toString(Operator op){
     return opToStr[op];
 }
 
+
 /* Ajout d'une instruction arithmétique dans la table */
 void asm_add_arith(Operator op) {
     asm_add_instr3(op, ts_get_second_to_last_tmp(), ts_get_second_to_last_tmp(), ts_get_last_tmp());
@@ -82,6 +83,19 @@ void asm_update_jmf(int to_modify, int new_val) {
     asm_table[to_modify] = newInstr;
 } 
 
+/* Enregistrer table des instructions */
+void asm_save_table(FILE* input) {
+    int i=0;
+    while(i<INSTR_MAX && i<indice_ti) {
+        fprintf(input, 
+            "%s %d %d %d \n", 
+            asm_op_toString(asm_table[i].op), 
+            asm_table[i].op1, 
+            asm_table[i].op2, 
+            asm_table[i].op3);
+        i++;
+    }
+}
 
 /* Afficher la table */
 void asm_print_table(){

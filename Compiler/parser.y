@@ -21,7 +21,7 @@ void yyerror(char *s);
 
 %%
 
-Program : tINT tID tOP tCP Body ;
+Program : tINT tMAIN tOP tCP Body ;
 
 /*Body : tOB {
             ts_inc_depth();
@@ -32,13 +32,47 @@ Body : tOB Content tCB;
 
 Content : | Instruction Content ;
 
-Instruction : Declaration
+Instruction : Constantes
+            | Declaration
             | Affectation 
             | LoopIf 
             | LoopWhile 
             | Print 
             | Return 
             | tCOMMENT ;     
+
+
+/*************************************************************************/
+/****************************** CONSTANTES *******************************/
+/*************************************************************************/
+Constantes : tCONST Dec tSC ; 
+
+Dec : tID tCOM DecNext { 
+            if (ts_exists_sym($1)){
+                fprintf(stderr,"The constant already exists\n");
+                return 1;
+            } else { 
+                ts_add_sym($1, "const");} 
+            } ;
+                
+Dec : tID { 
+                if (ts_exists_sym($1)){
+                    fprintf(stderr,"The constant already exists\n");
+                    return 1;
+                }else { 
+                    ts_add_sym($1, "const");}
+                } ; 
+                
+Dec : tID tEQ   { if (ts_exists_sym($1)){
+                        fprintf(stderr,"The constant already exists\n");
+                        return 1;
+                    } else { 
+                        ts_add_sym($1, "const");}
+                    }                
+                    Arith_Expr {
+                        asm_add_copy(ts_get_addr($1)); 
+                        ts_init($1);
+                    } ; 
 
 
 
@@ -83,8 +117,12 @@ DecNext : tID tEQ   { if (ts_exists_sym($1)){
 /*************************************************************************/
 
 Affectation : tID tEQ Arith_Expr tSC { 
-                                asm_add_copy(ts_get_addr($1)); 
-                                ts_init($1);
+                                if (strcmp(ts_get_type($1),"const")==0 && ts_is_init($1)==1) {
+                                    fprintf(stderr,"The constant is already initialized\n");
+                                    return 1;
+                                } else {}
+                                    asm_add_copy(ts_get_addr($1)); 
+                                    ts_init($1);
                                 };
 
 

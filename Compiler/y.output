@@ -1,124 +1,128 @@
-Terminaux inutilisés dans la grammaire
-
-    tMAIN
-    tCONST
-
-
 Grammaire
 
     0 $accept: Program $end
 
-    1 Program: tINT tID tOP tCP Body
+    1 Program: tINT tMAIN tOP tCP Body
 
     2 Body: tOB Content tCB
 
     3 Content: %empty
     4        | Instruction Content
 
-    5 Instruction: Declaration
-    6            | Affectation
-    7            | LoopIf
-    8            | LoopWhile
-    9            | Print
-   10            | Return
-   11            | tCOMMENT
+    5 Instruction: Constantes
+    6            | Declaration
+    7            | Affectation
+    8            | LoopIf
+    9            | LoopWhile
+   10            | Print
+   11            | Return
+   12            | tCOMMENT
 
-   12 Declaration: tINT DecNext tSC
+   13 Constantes: tCONST Dec tSC
 
-   13 DecNext: tID tCOM DecNext
-   14        | tID
+   14 Dec: tID tCOM DecNext
+   15    | tID
 
-   15 $@1: %empty
+   16 $@1: %empty
 
-   16 DecNext: tID tEQ $@1 Arith_Expr
+   17 Dec: tID tEQ $@1 Arith_Expr
 
-   17 Affectation: tID tEQ Arith_Expr tSC
+   18 Declaration: tINT DecNext tSC
 
-   18 $@2: %empty
+   19 DecNext: tID tCOM DecNext
+   20        | tID
 
-   19 $@3: %empty
+   21 $@2: %empty
 
-   20 LoopIf: tIF tOP Condition $@2 tCP $@3 Body IfNext
+   22 DecNext: tID tEQ $@2 Arith_Expr
 
-   21 $@4: %empty
+   23 Affectation: tID tEQ Arith_Expr tSC
 
-   22 IfNext: tELSE $@4 Body
-   23       | %empty
+   24 $@3: %empty
 
-   24 $@5: %empty
+   25 $@4: %empty
 
-   25 $@6: %empty
+   26 LoopIf: tIF tOP Condition $@3 tCP $@4 Body IfNext
 
-   26 $@7: %empty
+   27 $@5: %empty
 
-   27 LoopWhile: tWHILE tOP $@5 Condition $@6 tCP $@7 Body
+   28 IfNext: tELSE $@5 Body
+   29       | %empty
 
-   28 Arith_Expr: Factor
-   29           | Arith_Expr tADD Factor
-   30           | Arith_Expr tSUB Factor
+   30 $@6: %empty
 
-   31 Factor: Term
-   32       | Factor tMUL Term
-   33       | Factor tDIV Term
+   31 $@7: %empty
 
-   34 Term: tNB
-   35     | tID
-   36     | tOP Arith_Expr tCP
+   32 $@8: %empty
 
-   37 Condition: Bool_Expr
-   38          | Bool_Expr tAND Bool_Expr
-   39          | Bool_Expr tOR Bool_Expr
+   33 LoopWhile: tWHILE tOP $@6 Condition $@7 tCP $@8 Body
 
-   40 Bool_Expr: tTRUE
-   41          | tFALSE
-   42          | Arith_Expr tINF Arith_Expr
-   43          | Arith_Expr tSUP Arith_Expr
-   44          | Arith_Expr tDIF Arith_Expr
-   45          | Arith_Expr tEQUAL Arith_Expr
+   34 Arith_Expr: Factor
+   35           | Arith_Expr tADD Factor
+   36           | Arith_Expr tSUB Factor
 
-   46 Print: tPRINTF tOP tNB tCP tSC
-   47      | tPRINTF tOP tID tCP tSC
+   37 Factor: Term
+   38       | Factor tMUL Term
+   39       | Factor tDIV Term
 
-   48 Return: tRETURN Expr tSC
+   40 Term: tNB
+   41     | tID
+   42     | tOP Arith_Expr tCP
 
-   49 Expr: Arith_Expr
-   50     | Bool_Expr
+   43 Condition: Bool_Expr
+   44          | Bool_Expr tAND Bool_Expr
+   45          | Bool_Expr tOR Bool_Expr
+
+   46 Bool_Expr: tTRUE
+   47          | tFALSE
+   48          | Arith_Expr tINF Arith_Expr
+   49          | Arith_Expr tSUP Arith_Expr
+   50          | Arith_Expr tDIF Arith_Expr
+   51          | Arith_Expr tEQUAL Arith_Expr
+
+   52 Print: tPRINTF tOP tNB tCP tSC
+   53      | tPRINTF tOP tID tCP tSC
+
+   54 Return: tRETURN Expr tSC
+
+   55 Expr: Arith_Expr
+   56     | Bool_Expr
 
 
 Terminaux, suivis des règles où ils apparaissent
 
     $end (0) 0
     error (256)
-    tMAIN (258)
-    tPRINTF (259) 46 47
-    tRETURN (260) 48
-    tIF (261) 20
-    tELSE (262) 22
-    tWHILE (263) 27
-    tTRUE (264) 40
-    tFALSE (265) 41
-    tOP (266) 1 20 27 36 46 47
-    tCP (267) 1 20 27 36 46 47
+    tMAIN (258) 1
+    tPRINTF (259) 52 53
+    tRETURN (260) 54
+    tIF (261) 26
+    tELSE (262) 28
+    tWHILE (263) 33
+    tTRUE (264) 46
+    tFALSE (265) 47
+    tOP (266) 1 26 33 42 52 53
+    tCP (267) 1 26 33 42 52 53
     tOB (268) 2
     tCB (269) 2
-    tCONST (270)
-    tINT (271) 1 12
-    tCOM (272) 13
-    tSC (273) 12 17 46 47 48
-    tADD (274) 29
-    tSUB (275) 30
-    tMUL (276) 32
-    tDIV (277) 33
-    tEQ (278) 16 17
-    tINF (279) 42
-    tSUP (280) 43
-    tEQUAL (281) 45
-    tDIF (282) 44
-    tAND (283) 38
-    tOR (284) 39
-    tCOMMENT (285) 11
-    tNB <nb> (286) 34 46
-    tID <str> (287) 1 13 14 16 17 35 47
+    tCONST (270) 13
+    tINT (271) 1 18
+    tCOM (272) 14 19
+    tSC (273) 13 18 23 52 53 54
+    tADD (274) 35
+    tSUB (275) 36
+    tMUL (276) 38
+    tDIV (277) 39
+    tEQ (278) 17 22 23
+    tINF (279) 48
+    tSUP (280) 49
+    tEQUAL (281) 51
+    tDIF (282) 50
+    tAND (283) 44
+    tOR (284) 45
+    tCOMMENT (285) 12
+    tNB <nb> (286) 40 52
+    tID <str> (287) 14 15 17 19 20 22 23 41 53
 
 
 Non-terminaux, suivis des règles où ils apparaissent
@@ -130,76 +134,85 @@ Non-terminaux, suivis des règles où ils apparaissent
         à droite: 0
     Body (35)
         à gauche: 2
-        à droite: 1 20 22 27
+        à droite: 1 26 28 33
     Content (36)
         à gauche: 3 4
         à droite: 2 4
     Instruction (37)
-        à gauche: 5 6 7 8 9 10 11
+        à gauche: 5 6 7 8 9 10 11 12
         à droite: 4
-    Declaration (38)
-        à gauche: 12
+    Constantes (38)
+        à gauche: 13
         à droite: 5
-    DecNext (39)
-        à gauche: 13 14 16
-        à droite: 12 13
+    Dec (39)
+        à gauche: 14 15 17
+        à droite: 13
     $@1 (40)
-        à gauche: 15
-        à droite: 16
-    Affectation (41)
-        à gauche: 17
-        à droite: 6
-    LoopIf (42)
-        à gauche: 20
-        à droite: 7
-    $@2 (43)
+        à gauche: 16
+        à droite: 17
+    Declaration (41)
         à gauche: 18
-        à droite: 20
-    $@3 (44)
-        à gauche: 19
-        à droite: 20
-    IfNext (45)
-        à gauche: 22 23
-        à droite: 20
-    $@4 (46)
+        à droite: 6
+    DecNext (42)
+        à gauche: 19 20 22
+        à droite: 14 18 19
+    $@2 (43)
         à gauche: 21
         à droite: 22
-    LoopWhile (47)
-        à gauche: 27
-        à droite: 8
-    $@5 (48)
-        à gauche: 24
-        à droite: 27
-    $@6 (49)
-        à gauche: 25
-        à droite: 27
-    $@7 (50)
+    Affectation (44)
+        à gauche: 23
+        à droite: 7
+    LoopIf (45)
         à gauche: 26
-        à droite: 27
-    Arith_Expr <nb> (51)
-        à gauche: 28 29 30
-        à droite: 16 17 29 30 36 42 43 44 45 49
-    Factor <nb> (52)
-        à gauche: 31 32 33
-        à droite: 28 29 30 32 33
-    Term <nb> (53)
-        à gauche: 34 35 36
-        à droite: 31 32 33
-    Condition <nb> (54)
-        à gauche: 37 38 39
-        à droite: 20 27
-    Bool_Expr <nb> (55)
-        à gauche: 40 41 42 43 44 45
-        à droite: 37 38 39 50
-    Print (56)
-        à gauche: 46 47
+        à droite: 8
+    $@3 (46)
+        à gauche: 24
+        à droite: 26
+    $@4 (47)
+        à gauche: 25
+        à droite: 26
+    IfNext (48)
+        à gauche: 28 29
+        à droite: 26
+    $@5 (49)
+        à gauche: 27
+        à droite: 28
+    LoopWhile (50)
+        à gauche: 33
         à droite: 9
-    Return (57)
-        à gauche: 48
+    $@6 (51)
+        à gauche: 30
+        à droite: 33
+    $@7 (52)
+        à gauche: 31
+        à droite: 33
+    $@8 (53)
+        à gauche: 32
+        à droite: 33
+    Arith_Expr <nb> (54)
+        à gauche: 34 35 36
+        à droite: 17 22 23 35 36 42 48 49 50 51 55
+    Factor <nb> (55)
+        à gauche: 37 38 39
+        à droite: 34 35 36 38 39
+    Term <nb> (56)
+        à gauche: 40 41 42
+        à droite: 37 38 39
+    Condition <nb> (57)
+        à gauche: 43 44 45
+        à droite: 26 33
+    Bool_Expr <nb> (58)
+        à gauche: 46 47 48 49 50 51
+        à droite: 43 44 45 56
+    Print (59)
+        à gauche: 52 53
         à droite: 10
-    Expr (58)
-        à gauche: 49 50
-        à droite: 48
+    Return (60)
+        à gauche: 54
+        à droite: 11
+    Expr (61)
+        à gauche: 55 56
+        à droite: 54
 
 
 État 0
@@ -213,9 +226,9 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 1
 
-    1 Program: tINT . tID tOP tCP Body
+    1 Program: tINT . tMAIN tOP tCP Body
 
-    tID  décalage et aller à l'état 3
+    tMAIN  décalage et aller à l'état 3
 
 
 État 2
@@ -227,7 +240,7 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 3
 
-    1 Program: tINT tID . tOP tCP Body
+    1 Program: tINT tMAIN . tOP tCP Body
 
     tOP  décalage et aller à l'état 5
 
@@ -241,14 +254,14 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 5
 
-    1 Program: tINT tID tOP . tCP Body
+    1 Program: tINT tMAIN tOP . tCP Body
 
     tCP  décalage et aller à l'état 6
 
 
 État 6
 
-    1 Program: tINT tID tOP tCP . Body
+    1 Program: tINT tMAIN tOP tCP . Body
 
     tOB  décalage et aller à l'état 7
 
@@ -263,99 +276,110 @@ Non-terminaux, suivis des règles où ils apparaissent
     tRETURN   décalage et aller à l'état 10
     tIF       décalage et aller à l'état 11
     tWHILE    décalage et aller à l'état 12
-    tINT      décalage et aller à l'état 13
-    tCOMMENT  décalage et aller à l'état 14
-    tID       décalage et aller à l'état 15
+    tCONST    décalage et aller à l'état 13
+    tINT      décalage et aller à l'état 14
+    tCOMMENT  décalage et aller à l'état 15
+    tID       décalage et aller à l'état 16
 
     $défaut  réduction par utilisation de la règle 3 (Content)
 
-    Content      aller à l'état 16
-    Instruction  aller à l'état 17
-    Declaration  aller à l'état 18
-    Affectation  aller à l'état 19
-    LoopIf       aller à l'état 20
-    LoopWhile    aller à l'état 21
-    Print        aller à l'état 22
-    Return       aller à l'état 23
+    Content      aller à l'état 17
+    Instruction  aller à l'état 18
+    Constantes   aller à l'état 19
+    Declaration  aller à l'état 20
+    Affectation  aller à l'état 21
+    LoopIf       aller à l'état 22
+    LoopWhile    aller à l'état 23
+    Print        aller à l'état 24
+    Return       aller à l'état 25
 
 
 État 8
 
-    1 Program: tINT tID tOP tCP Body .
+    1 Program: tINT tMAIN tOP tCP Body .
 
     $défaut  réduction par utilisation de la règle 1 (Program)
 
 
 État 9
 
-   46 Print: tPRINTF . tOP tNB tCP tSC
-   47      | tPRINTF . tOP tID tCP tSC
+   52 Print: tPRINTF . tOP tNB tCP tSC
+   53      | tPRINTF . tOP tID tCP tSC
 
-    tOP  décalage et aller à l'état 24
+    tOP  décalage et aller à l'état 26
 
 
 État 10
 
-   48 Return: tRETURN . Expr tSC
+   54 Return: tRETURN . Expr tSC
 
-    tTRUE   décalage et aller à l'état 25
-    tFALSE  décalage et aller à l'état 26
-    tOP     décalage et aller à l'état 27
-    tNB     décalage et aller à l'état 28
-    tID     décalage et aller à l'état 29
+    tTRUE   décalage et aller à l'état 27
+    tFALSE  décalage et aller à l'état 28
+    tOP     décalage et aller à l'état 29
+    tNB     décalage et aller à l'état 30
+    tID     décalage et aller à l'état 31
 
-    Arith_Expr  aller à l'état 30
-    Factor      aller à l'état 31
-    Term        aller à l'état 32
-    Bool_Expr   aller à l'état 33
-    Expr        aller à l'état 34
+    Arith_Expr  aller à l'état 32
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
+    Bool_Expr   aller à l'état 35
+    Expr        aller à l'état 36
 
 
 État 11
 
-   20 LoopIf: tIF . tOP Condition $@2 tCP $@3 Body IfNext
+   26 LoopIf: tIF . tOP Condition $@3 tCP $@4 Body IfNext
 
-    tOP  décalage et aller à l'état 35
+    tOP  décalage et aller à l'état 37
 
 
 État 12
 
-   27 LoopWhile: tWHILE . tOP $@5 Condition $@6 tCP $@7 Body
+   33 LoopWhile: tWHILE . tOP $@6 Condition $@7 tCP $@8 Body
 
-    tOP  décalage et aller à l'état 36
+    tOP  décalage et aller à l'état 38
 
 
 État 13
 
-   12 Declaration: tINT . DecNext tSC
+   13 Constantes: tCONST . Dec tSC
 
-    tID  décalage et aller à l'état 37
+    tID  décalage et aller à l'état 39
 
-    DecNext  aller à l'état 38
+    Dec  aller à l'état 40
 
 
 État 14
 
-   11 Instruction: tCOMMENT .
+   18 Declaration: tINT . DecNext tSC
 
-    $défaut  réduction par utilisation de la règle 11 (Instruction)
+    tID  décalage et aller à l'état 41
+
+    DecNext  aller à l'état 42
 
 
 État 15
 
-   17 Affectation: tID . tEQ Arith_Expr tSC
+   12 Instruction: tCOMMENT .
 
-    tEQ  décalage et aller à l'état 39
+    $défaut  réduction par utilisation de la règle 12 (Instruction)
 
 
 État 16
 
-    2 Body: tOB Content . tCB
+   23 Affectation: tID . tEQ Arith_Expr tSC
 
-    tCB  décalage et aller à l'état 40
+    tEQ  décalage et aller à l'état 43
 
 
 État 17
+
+    2 Body: tOB Content . tCB
+
+    tCB  décalage et aller à l'état 44
+
+
+État 18
 
     4 Content: Instruction . Content
 
@@ -363,770 +387,855 @@ Non-terminaux, suivis des règles où ils apparaissent
     tRETURN   décalage et aller à l'état 10
     tIF       décalage et aller à l'état 11
     tWHILE    décalage et aller à l'état 12
-    tINT      décalage et aller à l'état 13
-    tCOMMENT  décalage et aller à l'état 14
-    tID       décalage et aller à l'état 15
+    tCONST    décalage et aller à l'état 13
+    tINT      décalage et aller à l'état 14
+    tCOMMENT  décalage et aller à l'état 15
+    tID       décalage et aller à l'état 16
 
     $défaut  réduction par utilisation de la règle 3 (Content)
 
-    Content      aller à l'état 41
-    Instruction  aller à l'état 17
-    Declaration  aller à l'état 18
-    Affectation  aller à l'état 19
-    LoopIf       aller à l'état 20
-    LoopWhile    aller à l'état 21
-    Print        aller à l'état 22
-    Return       aller à l'état 23
-
-
-État 18
-
-    5 Instruction: Declaration .
-
-    $défaut  réduction par utilisation de la règle 5 (Instruction)
+    Content      aller à l'état 45
+    Instruction  aller à l'état 18
+    Constantes   aller à l'état 19
+    Declaration  aller à l'état 20
+    Affectation  aller à l'état 21
+    LoopIf       aller à l'état 22
+    LoopWhile    aller à l'état 23
+    Print        aller à l'état 24
+    Return       aller à l'état 25
 
 
 État 19
 
-    6 Instruction: Affectation .
+    5 Instruction: Constantes .
 
-    $défaut  réduction par utilisation de la règle 6 (Instruction)
+    $défaut  réduction par utilisation de la règle 5 (Instruction)
 
 
 État 20
 
-    7 Instruction: LoopIf .
+    6 Instruction: Declaration .
 
-    $défaut  réduction par utilisation de la règle 7 (Instruction)
+    $défaut  réduction par utilisation de la règle 6 (Instruction)
 
 
 État 21
 
-    8 Instruction: LoopWhile .
+    7 Instruction: Affectation .
 
-    $défaut  réduction par utilisation de la règle 8 (Instruction)
+    $défaut  réduction par utilisation de la règle 7 (Instruction)
 
 
 État 22
 
-    9 Instruction: Print .
+    8 Instruction: LoopIf .
 
-    $défaut  réduction par utilisation de la règle 9 (Instruction)
+    $défaut  réduction par utilisation de la règle 8 (Instruction)
 
 
 État 23
 
-   10 Instruction: Return .
+    9 Instruction: LoopWhile .
 
-    $défaut  réduction par utilisation de la règle 10 (Instruction)
+    $défaut  réduction par utilisation de la règle 9 (Instruction)
 
 
 État 24
 
-   46 Print: tPRINTF tOP . tNB tCP tSC
-   47      | tPRINTF tOP . tID tCP tSC
+   10 Instruction: Print .
 
-    tNB  décalage et aller à l'état 42
-    tID  décalage et aller à l'état 43
+    $défaut  réduction par utilisation de la règle 10 (Instruction)
 
 
 État 25
 
-   40 Bool_Expr: tTRUE .
+   11 Instruction: Return .
 
-    $défaut  réduction par utilisation de la règle 40 (Bool_Expr)
+    $défaut  réduction par utilisation de la règle 11 (Instruction)
 
 
 État 26
 
-   41 Bool_Expr: tFALSE .
+   52 Print: tPRINTF tOP . tNB tCP tSC
+   53      | tPRINTF tOP . tID tCP tSC
 
-    $défaut  réduction par utilisation de la règle 41 (Bool_Expr)
+    tNB  décalage et aller à l'état 46
+    tID  décalage et aller à l'état 47
 
 
 État 27
 
-   36 Term: tOP . Arith_Expr tCP
+   46 Bool_Expr: tTRUE .
 
-    tOP  décalage et aller à l'état 27
-    tNB  décalage et aller à l'état 28
-    tID  décalage et aller à l'état 29
-
-    Arith_Expr  aller à l'état 44
-    Factor      aller à l'état 31
-    Term        aller à l'état 32
+    $défaut  réduction par utilisation de la règle 46 (Bool_Expr)
 
 
 État 28
 
-   34 Term: tNB .
+   47 Bool_Expr: tFALSE .
 
-    $défaut  réduction par utilisation de la règle 34 (Term)
+    $défaut  réduction par utilisation de la règle 47 (Bool_Expr)
 
 
 État 29
 
-   35 Term: tID .
+   42 Term: tOP . Arith_Expr tCP
 
-    $défaut  réduction par utilisation de la règle 35 (Term)
+    tOP  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 30
+    tID  décalage et aller à l'état 31
+
+    Arith_Expr  aller à l'état 48
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
 
 
 État 30
 
-   29 Arith_Expr: Arith_Expr . tADD Factor
-   30           | Arith_Expr . tSUB Factor
-   42 Bool_Expr: Arith_Expr . tINF Arith_Expr
-   43          | Arith_Expr . tSUP Arith_Expr
-   44          | Arith_Expr . tDIF Arith_Expr
-   45          | Arith_Expr . tEQUAL Arith_Expr
-   49 Expr: Arith_Expr .
+   40 Term: tNB .
 
-    tADD    décalage et aller à l'état 45
-    tSUB    décalage et aller à l'état 46
-    tINF    décalage et aller à l'état 47
-    tSUP    décalage et aller à l'état 48
-    tEQUAL  décalage et aller à l'état 49
-    tDIF    décalage et aller à l'état 50
-
-    $défaut  réduction par utilisation de la règle 49 (Expr)
+    $défaut  réduction par utilisation de la règle 40 (Term)
 
 
 État 31
 
-   28 Arith_Expr: Factor .
-   32 Factor: Factor . tMUL Term
-   33       | Factor . tDIV Term
+   41 Term: tID .
 
-    tMUL  décalage et aller à l'état 51
-    tDIV  décalage et aller à l'état 52
-
-    $défaut  réduction par utilisation de la règle 28 (Arith_Expr)
+    $défaut  réduction par utilisation de la règle 41 (Term)
 
 
 État 32
 
-   31 Factor: Term .
+   35 Arith_Expr: Arith_Expr . tADD Factor
+   36           | Arith_Expr . tSUB Factor
+   48 Bool_Expr: Arith_Expr . tINF Arith_Expr
+   49          | Arith_Expr . tSUP Arith_Expr
+   50          | Arith_Expr . tDIF Arith_Expr
+   51          | Arith_Expr . tEQUAL Arith_Expr
+   55 Expr: Arith_Expr .
 
-    $défaut  réduction par utilisation de la règle 31 (Factor)
+    tADD    décalage et aller à l'état 49
+    tSUB    décalage et aller à l'état 50
+    tINF    décalage et aller à l'état 51
+    tSUP    décalage et aller à l'état 52
+    tEQUAL  décalage et aller à l'état 53
+    tDIF    décalage et aller à l'état 54
+
+    $défaut  réduction par utilisation de la règle 55 (Expr)
 
 
 État 33
 
-   50 Expr: Bool_Expr .
+   34 Arith_Expr: Factor .
+   38 Factor: Factor . tMUL Term
+   39       | Factor . tDIV Term
 
-    $défaut  réduction par utilisation de la règle 50 (Expr)
+    tMUL  décalage et aller à l'état 55
+    tDIV  décalage et aller à l'état 56
+
+    $défaut  réduction par utilisation de la règle 34 (Arith_Expr)
 
 
 État 34
 
-   48 Return: tRETURN Expr . tSC
+   37 Factor: Term .
 
-    tSC  décalage et aller à l'état 53
+    $défaut  réduction par utilisation de la règle 37 (Factor)
 
 
 État 35
 
-   20 LoopIf: tIF tOP . Condition $@2 tCP $@3 Body IfNext
+   56 Expr: Bool_Expr .
 
-    tTRUE   décalage et aller à l'état 25
-    tFALSE  décalage et aller à l'état 26
-    tOP     décalage et aller à l'état 27
-    tNB     décalage et aller à l'état 28
-    tID     décalage et aller à l'état 29
-
-    Arith_Expr  aller à l'état 54
-    Factor      aller à l'état 31
-    Term        aller à l'état 32
-    Condition   aller à l'état 55
-    Bool_Expr   aller à l'état 56
+    $défaut  réduction par utilisation de la règle 56 (Expr)
 
 
 État 36
 
-   27 LoopWhile: tWHILE tOP . $@5 Condition $@6 tCP $@7 Body
+   54 Return: tRETURN Expr . tSC
 
-    $défaut  réduction par utilisation de la règle 24 ($@5)
-
-    $@5  aller à l'état 57
+    tSC  décalage et aller à l'état 57
 
 
 État 37
 
-   13 DecNext: tID . tCOM DecNext
-   14        | tID .
-   16        | tID . tEQ $@1 Arith_Expr
+   26 LoopIf: tIF tOP . Condition $@3 tCP $@4 Body IfNext
 
-    tCOM  décalage et aller à l'état 58
-    tEQ   décalage et aller à l'état 59
+    tTRUE   décalage et aller à l'état 27
+    tFALSE  décalage et aller à l'état 28
+    tOP     décalage et aller à l'état 29
+    tNB     décalage et aller à l'état 30
+    tID     décalage et aller à l'état 31
 
-    $défaut  réduction par utilisation de la règle 14 (DecNext)
+    Arith_Expr  aller à l'état 58
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
+    Condition   aller à l'état 59
+    Bool_Expr   aller à l'état 60
 
 
 État 38
 
-   12 Declaration: tINT DecNext . tSC
+   33 LoopWhile: tWHILE tOP . $@6 Condition $@7 tCP $@8 Body
 
-    tSC  décalage et aller à l'état 60
+    $défaut  réduction par utilisation de la règle 30 ($@6)
+
+    $@6  aller à l'état 61
 
 
 État 39
 
-   17 Affectation: tID tEQ . Arith_Expr tSC
+   14 Dec: tID . tCOM DecNext
+   15    | tID .
+   17    | tID . tEQ $@1 Arith_Expr
 
-    tOP  décalage et aller à l'état 27
-    tNB  décalage et aller à l'état 28
-    tID  décalage et aller à l'état 29
+    tCOM  décalage et aller à l'état 62
+    tEQ   décalage et aller à l'état 63
 
-    Arith_Expr  aller à l'état 61
-    Factor      aller à l'état 31
-    Term        aller à l'état 32
+    $défaut  réduction par utilisation de la règle 15 (Dec)
 
 
 État 40
+
+   13 Constantes: tCONST Dec . tSC
+
+    tSC  décalage et aller à l'état 64
+
+
+État 41
+
+   19 DecNext: tID . tCOM DecNext
+   20        | tID .
+   22        | tID . tEQ $@2 Arith_Expr
+
+    tCOM  décalage et aller à l'état 65
+    tEQ   décalage et aller à l'état 66
+
+    $défaut  réduction par utilisation de la règle 20 (DecNext)
+
+
+État 42
+
+   18 Declaration: tINT DecNext . tSC
+
+    tSC  décalage et aller à l'état 67
+
+
+État 43
+
+   23 Affectation: tID tEQ . Arith_Expr tSC
+
+    tOP  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 30
+    tID  décalage et aller à l'état 31
+
+    Arith_Expr  aller à l'état 68
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
+
+
+État 44
 
     2 Body: tOB Content tCB .
 
     $défaut  réduction par utilisation de la règle 2 (Body)
 
 
-État 41
+État 45
 
     4 Content: Instruction Content .
 
     $défaut  réduction par utilisation de la règle 4 (Content)
 
 
-État 42
-
-   46 Print: tPRINTF tOP tNB . tCP tSC
-
-    tCP  décalage et aller à l'état 62
-
-
-État 43
-
-   47 Print: tPRINTF tOP tID . tCP tSC
-
-    tCP  décalage et aller à l'état 63
-
-
-État 44
-
-   29 Arith_Expr: Arith_Expr . tADD Factor
-   30           | Arith_Expr . tSUB Factor
-   36 Term: tOP Arith_Expr . tCP
-
-    tCP   décalage et aller à l'état 64
-    tADD  décalage et aller à l'état 45
-    tSUB  décalage et aller à l'état 46
-
-
-État 45
-
-   29 Arith_Expr: Arith_Expr tADD . Factor
-
-    tOP  décalage et aller à l'état 27
-    tNB  décalage et aller à l'état 28
-    tID  décalage et aller à l'état 29
-
-    Factor  aller à l'état 65
-    Term    aller à l'état 32
-
-
 État 46
 
-   30 Arith_Expr: Arith_Expr tSUB . Factor
+   52 Print: tPRINTF tOP tNB . tCP tSC
 
-    tOP  décalage et aller à l'état 27
-    tNB  décalage et aller à l'état 28
-    tID  décalage et aller à l'état 29
-
-    Factor  aller à l'état 66
-    Term    aller à l'état 32
+    tCP  décalage et aller à l'état 69
 
 
 État 47
 
-   42 Bool_Expr: Arith_Expr tINF . Arith_Expr
+   53 Print: tPRINTF tOP tID . tCP tSC
 
-    tOP  décalage et aller à l'état 27
-    tNB  décalage et aller à l'état 28
-    tID  décalage et aller à l'état 29
-
-    Arith_Expr  aller à l'état 67
-    Factor      aller à l'état 31
-    Term        aller à l'état 32
+    tCP  décalage et aller à l'état 70
 
 
 État 48
 
-   43 Bool_Expr: Arith_Expr tSUP . Arith_Expr
+   35 Arith_Expr: Arith_Expr . tADD Factor
+   36           | Arith_Expr . tSUB Factor
+   42 Term: tOP Arith_Expr . tCP
 
-    tOP  décalage et aller à l'état 27
-    tNB  décalage et aller à l'état 28
-    tID  décalage et aller à l'état 29
-
-    Arith_Expr  aller à l'état 68
-    Factor      aller à l'état 31
-    Term        aller à l'état 32
+    tCP   décalage et aller à l'état 71
+    tADD  décalage et aller à l'état 49
+    tSUB  décalage et aller à l'état 50
 
 
 État 49
 
-   45 Bool_Expr: Arith_Expr tEQUAL . Arith_Expr
+   35 Arith_Expr: Arith_Expr tADD . Factor
 
-    tOP  décalage et aller à l'état 27
-    tNB  décalage et aller à l'état 28
-    tID  décalage et aller à l'état 29
+    tOP  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 30
+    tID  décalage et aller à l'état 31
 
-    Arith_Expr  aller à l'état 69
-    Factor      aller à l'état 31
-    Term        aller à l'état 32
+    Factor  aller à l'état 72
+    Term    aller à l'état 34
 
 
 État 50
 
-   44 Bool_Expr: Arith_Expr tDIF . Arith_Expr
+   36 Arith_Expr: Arith_Expr tSUB . Factor
 
-    tOP  décalage et aller à l'état 27
-    tNB  décalage et aller à l'état 28
-    tID  décalage et aller à l'état 29
+    tOP  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 30
+    tID  décalage et aller à l'état 31
 
-    Arith_Expr  aller à l'état 70
-    Factor      aller à l'état 31
-    Term        aller à l'état 32
+    Factor  aller à l'état 73
+    Term    aller à l'état 34
 
 
 État 51
 
-   32 Factor: Factor tMUL . Term
+   48 Bool_Expr: Arith_Expr tINF . Arith_Expr
 
-    tOP  décalage et aller à l'état 27
-    tNB  décalage et aller à l'état 28
-    tID  décalage et aller à l'état 29
+    tOP  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 30
+    tID  décalage et aller à l'état 31
 
-    Term  aller à l'état 71
+    Arith_Expr  aller à l'état 74
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
 
 
 État 52
 
-   33 Factor: Factor tDIV . Term
+   49 Bool_Expr: Arith_Expr tSUP . Arith_Expr
 
-    tOP  décalage et aller à l'état 27
-    tNB  décalage et aller à l'état 28
-    tID  décalage et aller à l'état 29
+    tOP  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 30
+    tID  décalage et aller à l'état 31
 
-    Term  aller à l'état 72
+    Arith_Expr  aller à l'état 75
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
 
 
 État 53
 
-   48 Return: tRETURN Expr tSC .
+   51 Bool_Expr: Arith_Expr tEQUAL . Arith_Expr
 
-    $défaut  réduction par utilisation de la règle 48 (Return)
+    tOP  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 30
+    tID  décalage et aller à l'état 31
+
+    Arith_Expr  aller à l'état 76
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
 
 
 État 54
 
-   29 Arith_Expr: Arith_Expr . tADD Factor
-   30           | Arith_Expr . tSUB Factor
-   42 Bool_Expr: Arith_Expr . tINF Arith_Expr
-   43          | Arith_Expr . tSUP Arith_Expr
-   44          | Arith_Expr . tDIF Arith_Expr
-   45          | Arith_Expr . tEQUAL Arith_Expr
+   50 Bool_Expr: Arith_Expr tDIF . Arith_Expr
 
-    tADD    décalage et aller à l'état 45
-    tSUB    décalage et aller à l'état 46
-    tINF    décalage et aller à l'état 47
-    tSUP    décalage et aller à l'état 48
-    tEQUAL  décalage et aller à l'état 49
-    tDIF    décalage et aller à l'état 50
+    tOP  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 30
+    tID  décalage et aller à l'état 31
+
+    Arith_Expr  aller à l'état 77
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
 
 
 État 55
 
-   20 LoopIf: tIF tOP Condition . $@2 tCP $@3 Body IfNext
+   38 Factor: Factor tMUL . Term
 
-    $défaut  réduction par utilisation de la règle 18 ($@2)
+    tOP  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 30
+    tID  décalage et aller à l'état 31
 
-    $@2  aller à l'état 73
+    Term  aller à l'état 78
 
 
 État 56
 
-   37 Condition: Bool_Expr .
-   38          | Bool_Expr . tAND Bool_Expr
-   39          | Bool_Expr . tOR Bool_Expr
+   39 Factor: Factor tDIV . Term
 
-    tAND  décalage et aller à l'état 74
-    tOR   décalage et aller à l'état 75
+    tOP  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 30
+    tID  décalage et aller à l'état 31
 
-    $défaut  réduction par utilisation de la règle 37 (Condition)
+    Term  aller à l'état 79
 
 
 État 57
 
-   27 LoopWhile: tWHILE tOP $@5 . Condition $@6 tCP $@7 Body
+   54 Return: tRETURN Expr tSC .
 
-    tTRUE   décalage et aller à l'état 25
-    tFALSE  décalage et aller à l'état 26
-    tOP     décalage et aller à l'état 27
-    tNB     décalage et aller à l'état 28
-    tID     décalage et aller à l'état 29
-
-    Arith_Expr  aller à l'état 54
-    Factor      aller à l'état 31
-    Term        aller à l'état 32
-    Condition   aller à l'état 76
-    Bool_Expr   aller à l'état 56
+    $défaut  réduction par utilisation de la règle 54 (Return)
 
 
 État 58
 
-   13 DecNext: tID tCOM . DecNext
+   35 Arith_Expr: Arith_Expr . tADD Factor
+   36           | Arith_Expr . tSUB Factor
+   48 Bool_Expr: Arith_Expr . tINF Arith_Expr
+   49          | Arith_Expr . tSUP Arith_Expr
+   50          | Arith_Expr . tDIF Arith_Expr
+   51          | Arith_Expr . tEQUAL Arith_Expr
 
-    tID  décalage et aller à l'état 37
-
-    DecNext  aller à l'état 77
+    tADD    décalage et aller à l'état 49
+    tSUB    décalage et aller à l'état 50
+    tINF    décalage et aller à l'état 51
+    tSUP    décalage et aller à l'état 52
+    tEQUAL  décalage et aller à l'état 53
+    tDIF    décalage et aller à l'état 54
 
 
 État 59
 
-   16 DecNext: tID tEQ . $@1 Arith_Expr
+   26 LoopIf: tIF tOP Condition . $@3 tCP $@4 Body IfNext
 
-    $défaut  réduction par utilisation de la règle 15 ($@1)
+    $défaut  réduction par utilisation de la règle 24 ($@3)
 
-    $@1  aller à l'état 78
+    $@3  aller à l'état 80
 
 
 État 60
 
-   12 Declaration: tINT DecNext tSC .
+   43 Condition: Bool_Expr .
+   44          | Bool_Expr . tAND Bool_Expr
+   45          | Bool_Expr . tOR Bool_Expr
 
-    $défaut  réduction par utilisation de la règle 12 (Declaration)
+    tAND  décalage et aller à l'état 81
+    tOR   décalage et aller à l'état 82
+
+    $défaut  réduction par utilisation de la règle 43 (Condition)
 
 
 État 61
 
-   17 Affectation: tID tEQ Arith_Expr . tSC
-   29 Arith_Expr: Arith_Expr . tADD Factor
-   30           | Arith_Expr . tSUB Factor
+   33 LoopWhile: tWHILE tOP $@6 . Condition $@7 tCP $@8 Body
 
-    tSC   décalage et aller à l'état 79
-    tADD  décalage et aller à l'état 45
-    tSUB  décalage et aller à l'état 46
+    tTRUE   décalage et aller à l'état 27
+    tFALSE  décalage et aller à l'état 28
+    tOP     décalage et aller à l'état 29
+    tNB     décalage et aller à l'état 30
+    tID     décalage et aller à l'état 31
+
+    Arith_Expr  aller à l'état 58
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
+    Condition   aller à l'état 83
+    Bool_Expr   aller à l'état 60
 
 
 État 62
 
-   46 Print: tPRINTF tOP tNB tCP . tSC
+   14 Dec: tID tCOM . DecNext
 
-    tSC  décalage et aller à l'état 80
+    tID  décalage et aller à l'état 41
+
+    DecNext  aller à l'état 84
 
 
 État 63
 
-   47 Print: tPRINTF tOP tID tCP . tSC
+   17 Dec: tID tEQ . $@1 Arith_Expr
 
-    tSC  décalage et aller à l'état 81
+    $défaut  réduction par utilisation de la règle 16 ($@1)
+
+    $@1  aller à l'état 85
 
 
 État 64
 
-   36 Term: tOP Arith_Expr tCP .
+   13 Constantes: tCONST Dec tSC .
 
-    $défaut  réduction par utilisation de la règle 36 (Term)
+    $défaut  réduction par utilisation de la règle 13 (Constantes)
 
 
 État 65
 
-   29 Arith_Expr: Arith_Expr tADD Factor .
-   32 Factor: Factor . tMUL Term
-   33       | Factor . tDIV Term
+   19 DecNext: tID tCOM . DecNext
 
-    tMUL  décalage et aller à l'état 51
-    tDIV  décalage et aller à l'état 52
+    tID  décalage et aller à l'état 41
 
-    $défaut  réduction par utilisation de la règle 29 (Arith_Expr)
+    DecNext  aller à l'état 86
 
 
 État 66
 
-   30 Arith_Expr: Arith_Expr tSUB Factor .
-   32 Factor: Factor . tMUL Term
-   33       | Factor . tDIV Term
+   22 DecNext: tID tEQ . $@2 Arith_Expr
 
-    tMUL  décalage et aller à l'état 51
-    tDIV  décalage et aller à l'état 52
+    $défaut  réduction par utilisation de la règle 21 ($@2)
 
-    $défaut  réduction par utilisation de la règle 30 (Arith_Expr)
+    $@2  aller à l'état 87
 
 
 État 67
 
-   29 Arith_Expr: Arith_Expr . tADD Factor
-   30           | Arith_Expr . tSUB Factor
-   42 Bool_Expr: Arith_Expr tINF Arith_Expr .
+   18 Declaration: tINT DecNext tSC .
 
-    tADD  décalage et aller à l'état 45
-    tSUB  décalage et aller à l'état 46
-
-    $défaut  réduction par utilisation de la règle 42 (Bool_Expr)
+    $défaut  réduction par utilisation de la règle 18 (Declaration)
 
 
 État 68
 
-   29 Arith_Expr: Arith_Expr . tADD Factor
-   30           | Arith_Expr . tSUB Factor
-   43 Bool_Expr: Arith_Expr tSUP Arith_Expr .
+   23 Affectation: tID tEQ Arith_Expr . tSC
+   35 Arith_Expr: Arith_Expr . tADD Factor
+   36           | Arith_Expr . tSUB Factor
 
-    tADD  décalage et aller à l'état 45
-    tSUB  décalage et aller à l'état 46
-
-    $défaut  réduction par utilisation de la règle 43 (Bool_Expr)
+    tSC   décalage et aller à l'état 88
+    tADD  décalage et aller à l'état 49
+    tSUB  décalage et aller à l'état 50
 
 
 État 69
 
-   29 Arith_Expr: Arith_Expr . tADD Factor
-   30           | Arith_Expr . tSUB Factor
-   45 Bool_Expr: Arith_Expr tEQUAL Arith_Expr .
+   52 Print: tPRINTF tOP tNB tCP . tSC
 
-    tADD  décalage et aller à l'état 45
-    tSUB  décalage et aller à l'état 46
-
-    $défaut  réduction par utilisation de la règle 45 (Bool_Expr)
+    tSC  décalage et aller à l'état 89
 
 
 État 70
 
-   29 Arith_Expr: Arith_Expr . tADD Factor
-   30           | Arith_Expr . tSUB Factor
-   44 Bool_Expr: Arith_Expr tDIF Arith_Expr .
+   53 Print: tPRINTF tOP tID tCP . tSC
 
-    tADD  décalage et aller à l'état 45
-    tSUB  décalage et aller à l'état 46
-
-    $défaut  réduction par utilisation de la règle 44 (Bool_Expr)
+    tSC  décalage et aller à l'état 90
 
 
 État 71
 
-   32 Factor: Factor tMUL Term .
+   42 Term: tOP Arith_Expr tCP .
 
-    $défaut  réduction par utilisation de la règle 32 (Factor)
+    $défaut  réduction par utilisation de la règle 42 (Term)
 
 
 État 72
 
-   33 Factor: Factor tDIV Term .
+   35 Arith_Expr: Arith_Expr tADD Factor .
+   38 Factor: Factor . tMUL Term
+   39       | Factor . tDIV Term
 
-    $défaut  réduction par utilisation de la règle 33 (Factor)
+    tMUL  décalage et aller à l'état 55
+    tDIV  décalage et aller à l'état 56
+
+    $défaut  réduction par utilisation de la règle 35 (Arith_Expr)
 
 
 État 73
 
-   20 LoopIf: tIF tOP Condition $@2 . tCP $@3 Body IfNext
+   36 Arith_Expr: Arith_Expr tSUB Factor .
+   38 Factor: Factor . tMUL Term
+   39       | Factor . tDIV Term
 
-    tCP  décalage et aller à l'état 82
+    tMUL  décalage et aller à l'état 55
+    tDIV  décalage et aller à l'état 56
+
+    $défaut  réduction par utilisation de la règle 36 (Arith_Expr)
 
 
 État 74
 
-   38 Condition: Bool_Expr tAND . Bool_Expr
+   35 Arith_Expr: Arith_Expr . tADD Factor
+   36           | Arith_Expr . tSUB Factor
+   48 Bool_Expr: Arith_Expr tINF Arith_Expr .
 
-    tTRUE   décalage et aller à l'état 25
-    tFALSE  décalage et aller à l'état 26
-    tOP     décalage et aller à l'état 27
-    tNB     décalage et aller à l'état 28
-    tID     décalage et aller à l'état 29
+    tADD  décalage et aller à l'état 49
+    tSUB  décalage et aller à l'état 50
 
-    Arith_Expr  aller à l'état 54
-    Factor      aller à l'état 31
-    Term        aller à l'état 32
-    Bool_Expr   aller à l'état 83
+    $défaut  réduction par utilisation de la règle 48 (Bool_Expr)
 
 
 État 75
 
-   39 Condition: Bool_Expr tOR . Bool_Expr
+   35 Arith_Expr: Arith_Expr . tADD Factor
+   36           | Arith_Expr . tSUB Factor
+   49 Bool_Expr: Arith_Expr tSUP Arith_Expr .
 
-    tTRUE   décalage et aller à l'état 25
-    tFALSE  décalage et aller à l'état 26
-    tOP     décalage et aller à l'état 27
-    tNB     décalage et aller à l'état 28
-    tID     décalage et aller à l'état 29
+    tADD  décalage et aller à l'état 49
+    tSUB  décalage et aller à l'état 50
 
-    Arith_Expr  aller à l'état 54
-    Factor      aller à l'état 31
-    Term        aller à l'état 32
-    Bool_Expr   aller à l'état 84
+    $défaut  réduction par utilisation de la règle 49 (Bool_Expr)
 
 
 État 76
 
-   27 LoopWhile: tWHILE tOP $@5 Condition . $@6 tCP $@7 Body
+   35 Arith_Expr: Arith_Expr . tADD Factor
+   36           | Arith_Expr . tSUB Factor
+   51 Bool_Expr: Arith_Expr tEQUAL Arith_Expr .
 
-    $défaut  réduction par utilisation de la règle 25 ($@6)
+    tADD  décalage et aller à l'état 49
+    tSUB  décalage et aller à l'état 50
 
-    $@6  aller à l'état 85
+    $défaut  réduction par utilisation de la règle 51 (Bool_Expr)
 
 
 État 77
 
-   13 DecNext: tID tCOM DecNext .
+   35 Arith_Expr: Arith_Expr . tADD Factor
+   36           | Arith_Expr . tSUB Factor
+   50 Bool_Expr: Arith_Expr tDIF Arith_Expr .
 
-    $défaut  réduction par utilisation de la règle 13 (DecNext)
+    tADD  décalage et aller à l'état 49
+    tSUB  décalage et aller à l'état 50
+
+    $défaut  réduction par utilisation de la règle 50 (Bool_Expr)
 
 
 État 78
 
-   16 DecNext: tID tEQ $@1 . Arith_Expr
+   38 Factor: Factor tMUL Term .
 
-    tOP  décalage et aller à l'état 27
-    tNB  décalage et aller à l'état 28
-    tID  décalage et aller à l'état 29
-
-    Arith_Expr  aller à l'état 86
-    Factor      aller à l'état 31
-    Term        aller à l'état 32
+    $défaut  réduction par utilisation de la règle 38 (Factor)
 
 
 État 79
 
-   17 Affectation: tID tEQ Arith_Expr tSC .
+   39 Factor: Factor tDIV Term .
 
-    $défaut  réduction par utilisation de la règle 17 (Affectation)
+    $défaut  réduction par utilisation de la règle 39 (Factor)
 
 
 État 80
 
-   46 Print: tPRINTF tOP tNB tCP tSC .
+   26 LoopIf: tIF tOP Condition $@3 . tCP $@4 Body IfNext
 
-    $défaut  réduction par utilisation de la règle 46 (Print)
+    tCP  décalage et aller à l'état 91
 
 
 État 81
 
-   47 Print: tPRINTF tOP tID tCP tSC .
+   44 Condition: Bool_Expr tAND . Bool_Expr
 
-    $défaut  réduction par utilisation de la règle 47 (Print)
+    tTRUE   décalage et aller à l'état 27
+    tFALSE  décalage et aller à l'état 28
+    tOP     décalage et aller à l'état 29
+    tNB     décalage et aller à l'état 30
+    tID     décalage et aller à l'état 31
+
+    Arith_Expr  aller à l'état 58
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
+    Bool_Expr   aller à l'état 92
 
 
 État 82
 
-   20 LoopIf: tIF tOP Condition $@2 tCP . $@3 Body IfNext
+   45 Condition: Bool_Expr tOR . Bool_Expr
 
-    $défaut  réduction par utilisation de la règle 19 ($@3)
+    tTRUE   décalage et aller à l'état 27
+    tFALSE  décalage et aller à l'état 28
+    tOP     décalage et aller à l'état 29
+    tNB     décalage et aller à l'état 30
+    tID     décalage et aller à l'état 31
 
-    $@3  aller à l'état 87
+    Arith_Expr  aller à l'état 58
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
+    Bool_Expr   aller à l'état 93
 
 
 État 83
 
-   38 Condition: Bool_Expr tAND Bool_Expr .
+   33 LoopWhile: tWHILE tOP $@6 Condition . $@7 tCP $@8 Body
 
-    $défaut  réduction par utilisation de la règle 38 (Condition)
+    $défaut  réduction par utilisation de la règle 31 ($@7)
+
+    $@7  aller à l'état 94
 
 
 État 84
 
-   39 Condition: Bool_Expr tOR Bool_Expr .
+   14 Dec: tID tCOM DecNext .
 
-    $défaut  réduction par utilisation de la règle 39 (Condition)
+    $défaut  réduction par utilisation de la règle 14 (Dec)
 
 
 État 85
 
-   27 LoopWhile: tWHILE tOP $@5 Condition $@6 . tCP $@7 Body
+   17 Dec: tID tEQ $@1 . Arith_Expr
 
-    tCP  décalage et aller à l'état 88
+    tOP  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 30
+    tID  décalage et aller à l'état 31
+
+    Arith_Expr  aller à l'état 95
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
 
 
 État 86
 
-   16 DecNext: tID tEQ $@1 Arith_Expr .
-   29 Arith_Expr: Arith_Expr . tADD Factor
-   30           | Arith_Expr . tSUB Factor
+   19 DecNext: tID tCOM DecNext .
 
-    tADD  décalage et aller à l'état 45
-    tSUB  décalage et aller à l'état 46
-
-    $défaut  réduction par utilisation de la règle 16 (DecNext)
+    $défaut  réduction par utilisation de la règle 19 (DecNext)
 
 
 État 87
 
-   20 LoopIf: tIF tOP Condition $@2 tCP $@3 . Body IfNext
+   22 DecNext: tID tEQ $@2 . Arith_Expr
 
-    tOB  décalage et aller à l'état 7
+    tOP  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 30
+    tID  décalage et aller à l'état 31
 
-    Body  aller à l'état 89
+    Arith_Expr  aller à l'état 96
+    Factor      aller à l'état 33
+    Term        aller à l'état 34
 
 
 État 88
 
-   27 LoopWhile: tWHILE tOP $@5 Condition $@6 tCP . $@7 Body
+   23 Affectation: tID tEQ Arith_Expr tSC .
 
-    $défaut  réduction par utilisation de la règle 26 ($@7)
-
-    $@7  aller à l'état 90
+    $défaut  réduction par utilisation de la règle 23 (Affectation)
 
 
 État 89
 
-   20 LoopIf: tIF tOP Condition $@2 tCP $@3 Body . IfNext
+   52 Print: tPRINTF tOP tNB tCP tSC .
 
-    tELSE  décalage et aller à l'état 91
-
-    $défaut  réduction par utilisation de la règle 23 (IfNext)
-
-    IfNext  aller à l'état 92
+    $défaut  réduction par utilisation de la règle 52 (Print)
 
 
 État 90
 
-   27 LoopWhile: tWHILE tOP $@5 Condition $@6 tCP $@7 . Body
+   53 Print: tPRINTF tOP tID tCP tSC .
 
-    tOB  décalage et aller à l'état 7
-
-    Body  aller à l'état 93
+    $défaut  réduction par utilisation de la règle 53 (Print)
 
 
 État 91
 
-   22 IfNext: tELSE . $@4 Body
+   26 LoopIf: tIF tOP Condition $@3 tCP . $@4 Body IfNext
 
-    $défaut  réduction par utilisation de la règle 21 ($@4)
+    $défaut  réduction par utilisation de la règle 25 ($@4)
 
-    $@4  aller à l'état 94
+    $@4  aller à l'état 97
 
 
 État 92
 
-   20 LoopIf: tIF tOP Condition $@2 tCP $@3 Body IfNext .
+   44 Condition: Bool_Expr tAND Bool_Expr .
 
-    $défaut  réduction par utilisation de la règle 20 (LoopIf)
+    $défaut  réduction par utilisation de la règle 44 (Condition)
 
 
 État 93
 
-   27 LoopWhile: tWHILE tOP $@5 Condition $@6 tCP $@7 Body .
+   45 Condition: Bool_Expr tOR Bool_Expr .
 
-    $défaut  réduction par utilisation de la règle 27 (LoopWhile)
+    $défaut  réduction par utilisation de la règle 45 (Condition)
 
 
 État 94
 
-   22 IfNext: tELSE $@4 . Body
+   33 LoopWhile: tWHILE tOP $@6 Condition $@7 . tCP $@8 Body
 
-    tOB  décalage et aller à l'état 7
-
-    Body  aller à l'état 95
+    tCP  décalage et aller à l'état 98
 
 
 État 95
 
-   22 IfNext: tELSE $@4 Body .
+   17 Dec: tID tEQ $@1 Arith_Expr .
+   35 Arith_Expr: Arith_Expr . tADD Factor
+   36           | Arith_Expr . tSUB Factor
 
-    $défaut  réduction par utilisation de la règle 22 (IfNext)
+    tADD  décalage et aller à l'état 49
+    tSUB  décalage et aller à l'état 50
+
+    $défaut  réduction par utilisation de la règle 17 (Dec)
+
+
+État 96
+
+   22 DecNext: tID tEQ $@2 Arith_Expr .
+   35 Arith_Expr: Arith_Expr . tADD Factor
+   36           | Arith_Expr . tSUB Factor
+
+    tADD  décalage et aller à l'état 49
+    tSUB  décalage et aller à l'état 50
+
+    $défaut  réduction par utilisation de la règle 22 (DecNext)
+
+
+État 97
+
+   26 LoopIf: tIF tOP Condition $@3 tCP $@4 . Body IfNext
+
+    tOB  décalage et aller à l'état 7
+
+    Body  aller à l'état 99
+
+
+État 98
+
+   33 LoopWhile: tWHILE tOP $@6 Condition $@7 tCP . $@8 Body
+
+    $défaut  réduction par utilisation de la règle 32 ($@8)
+
+    $@8  aller à l'état 100
+
+
+État 99
+
+   26 LoopIf: tIF tOP Condition $@3 tCP $@4 Body . IfNext
+
+    tELSE  décalage et aller à l'état 101
+
+    $défaut  réduction par utilisation de la règle 29 (IfNext)
+
+    IfNext  aller à l'état 102
+
+
+État 100
+
+   33 LoopWhile: tWHILE tOP $@6 Condition $@7 tCP $@8 . Body
+
+    tOB  décalage et aller à l'état 7
+
+    Body  aller à l'état 103
+
+
+État 101
+
+   28 IfNext: tELSE . $@5 Body
+
+    $défaut  réduction par utilisation de la règle 27 ($@5)
+
+    $@5  aller à l'état 104
+
+
+État 102
+
+   26 LoopIf: tIF tOP Condition $@3 tCP $@4 Body IfNext .
+
+    $défaut  réduction par utilisation de la règle 26 (LoopIf)
+
+
+État 103
+
+   33 LoopWhile: tWHILE tOP $@6 Condition $@7 tCP $@8 Body .
+
+    $défaut  réduction par utilisation de la règle 33 (LoopWhile)
+
+
+État 104
+
+   28 IfNext: tELSE $@5 . Body
+
+    tOB  décalage et aller à l'état 7
+
+    Body  aller à l'état 105
+
+
+État 105
+
+   28 IfNext: tELSE $@5 Body .
+
+    $défaut  réduction par utilisation de la règle 28 (IfNext)

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #ifndef ASM_TABLE_H
 #define ASM_TABLE_H
 
@@ -30,11 +31,12 @@ int asm_get_index();
 void asm_update_jmp(int to_modify, int new_val);
 void asm_update_jmf(int to_modify, int new_val);
 
+/* Save table */
+void asm_save_table(FILE* input);
+
 /* Print table */ 
 void asm_print_table(); 
 char* asm_op_toString(Operator op);
-
-
 
 
 #endif

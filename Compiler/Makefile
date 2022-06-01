@@ -5,7 +5,7 @@ BIN=comp
 CC=gcc
 CFLAGS=-Wall -g
 
-OBJ=y.tab.o lex.yy.o main.o ts.o asm_table.o jump.o
+OBJ=y.tab.o lex.yy.o main.o ts.o asm_table.o jump.o interpreter.o
 
 all: $(BIN)
 
@@ -19,6 +19,9 @@ asm_table.o: ./sources/asm_table.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 jump.o: ./sources/jump.c
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
+
+interpreter.o: ./sources/interpreter.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 y.tab.c: $(GRM)
