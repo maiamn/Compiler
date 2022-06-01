@@ -49,8 +49,8 @@ Port ( A : in STD_LOGIC_VECTOR (7 downto 0);
 end component;
 
 -- Inputs
-signal my_A : STD_LOGIC_VECTOR (7 downto 0) := "11111111";
-signal my_B : STD_LOGIC_VECTOR (7 downto 0) := "11111111"; 
+signal my_A : STD_LOGIC_VECTOR (7 downto 0) := "00000011";
+signal my_B : STD_LOGIC_VECTOR (7 downto 0) := "00000010"; 
 signal my_Ctrl_Alu : STD_LOGIC_VECTOR (2 downto 0) := (others => '0') ; 
 
 -- Outputs
@@ -75,7 +75,5 @@ Label_uut : UAL PORT MAP(
 
 -- Stimulus process 
 my_Ctrl_Alu <= "001" after 00ns, "010" after 40ns, "011" after 80ns, "100" after 120ns;
-
-
 
 end;
